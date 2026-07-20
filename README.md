@@ -17,7 +17,8 @@ GitHub Pagesで公開する静的Webサイトです。
 │   ├── css/site.css           # 共通デザイン・レスポンシブ・ダークモード
 │   ├── js/site.js             # モバイルナビ・年表示
 │   ├── icons/                 # favicon・公式Xブランド素材
-│   └── images/                # アプリ画面・OGP・Xヘッダー
+│   ├── images/                # アプリ画面・OGP・Xヘッダー
+│   └── social/                # 公式SNS投稿・プロフィール用素材
 ├── releases/
 │   ├── index.html             # リリースノート入口
 │   └── README.md              # 追加手順
@@ -68,6 +69,9 @@ GitHub Pagesで公開する静的Webサイトです。
 
 XロゴはX公式ブランドツールキットから取得した素材をそのまま使用しています。
 利用時はXのブランドガイドラインに従います。
+
+プロフィール画像：
+`assets/social/x-profile-icon-400x400.png`
 
 ## Xヘッダー・OGP画像の再生成
 
