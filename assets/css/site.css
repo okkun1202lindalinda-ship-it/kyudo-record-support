@@ -42,6 +42,7 @@ body {
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }
 
 a {
@@ -284,6 +285,7 @@ main {
 .phone-shot img {
   width: 100%;
   height: auto;
+  object-fit: contain;
 }
 
 .phone-shot-home {
@@ -422,8 +424,11 @@ main {
 
 .support-screenshot {
   width: min(310px, 72%);
+  max-width: 100%;
+  height: auto;
   margin-inline: auto;
   border-radius: 28px;
+  object-fit: contain;
   box-shadow: var(--shadow-card);
 }
 

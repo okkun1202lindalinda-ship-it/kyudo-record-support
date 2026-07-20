@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -52,8 +53,14 @@ class PageParser(HTMLParser):
         if tag == "link" and values.get("rel") == "canonical":
             self.has_canonical = bool(values.get("href"))
 
-        if tag == "img" and "alt" not in values:
-            self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
+        if tag == "img":
+            if "alt" not in values:
+                self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
+            classes = set((values.get("class") or "").split())
+            if "support-screenshot" in classes and "height" in values:
+                self.errors.append(
+                    "support-screenshotへ固定height属性を指定している"
+                )
 
         if "style" in values:
             self.errors.append(f"インラインstyleを使用: <{tag}>")
@@ -143,6 +150,23 @@ def main() -> int:
     errors: list[str] = []
     for page in HTML_FILES:
         errors.extend(validate_page(page))
+
+    stylesheet = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
+    if re.search(r"object-fit\s*:\s*fill\b", stylesheet):
+        errors.append("CSSでobject-fit: fillを使用している")
+    support_rule = re.search(
+        r"\.support-screenshot\s*\{(?P<body>[^}]*)\}",
+        stylesheet,
+        flags=re.DOTALL,
+    )
+    if support_rule is None:
+        errors.append("support-screenshotのCSS定義がない")
+    else:
+        declarations = support_rule.group("body")
+        if not re.search(r"height\s*:\s*auto\s*;", declarations):
+            errors.append("support-screenshotにheight: autoがない")
+        if not re.search(r"object-fit\s*:\s*contain\s*;", declarations):
+            errors.append("support-screenshotにobject-fit: containがない")
 
     required_assets = [
         ROOT / "assets/images/x-header-1500x500.png",
