@@ -4,22 +4,22 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#46689b">
-  <title>リリースノート｜自分だけの弓道ノート</title>
+  <title>Version 7.1.0｜自分だけの弓道ノート</title>
   <meta
     name="description"
-    content="自分だけの弓道ノートの更新履歴とリリースノートを掲載します。"
+    content="自分だけの弓道ノート Version 7.1.0の更新内容です。"
   >
   <link
     rel="canonical"
-    href="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/releases/"
+    href="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/releases/v7-1-0.html"
   >
-  <meta property="og:type" content="website">
+  <meta property="og:type" content="article">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:site_name" content="自分だけの弓道ノート">
-  <meta property="og:title" content="リリースノート｜自分だけの弓道ノート">
+  <meta property="og:title" content="Version 7.1.0｜自分だけの弓道ノート">
   <meta
     property="og:description"
-    content="自分だけの弓道ノートの更新履歴を掲載します。"
+    content="記録・履歴・道具管理の操作性とテーマ選択を改善した正式リリース候補版です。"
   >
   <meta
     property="og:image"
@@ -70,37 +70,40 @@
   <main id="main-content">
     <section class="page-hero">
       <div class="container">
-        <p class="eyebrow">Release Notes</p>
-        <h1>更新履歴</h1>
-        <p>正式リリース後、バージョンごとの変更内容をこのページへ掲載します。</p>
+        <p class="eyebrow">Release Candidate</p>
+        <h1>Version 7.1.0</h1>
+        <p>自分の記録を、より素早く、あとから育てやすく。</p>
       </div>
     </section>
 
     <section class="section">
       <div class="container narrow content-stack">
-        <!--
-          新しいリリースを追加する手順:
-          1. releases/v7-0-0.html のようなページを作成
-          2. 下の一覧へ日付、バージョン、概要、リンクを追加
-          3. index.html の News / Release Notes カードも必要に応じて更新
-        -->
         <article class="content-card">
           <span class="status">正式リリース準備中</span>
-          <h2><a href="v7-1-0.html">Version 7.1.0</a></h2>
-          <p>
-            記録・履歴・道具管理の操作性向上、テーマカラー拡張、
-            新しいアプリアイコンを含む正式リリース候補版です。
-          </p>
-          <div class="button-row">
-            <a class="button" href="v7-1-0.html">変更内容を見る</a>
-            <a
-              class="button button-secondary"
-              href="https://x.com/MyKyudoNote"
-              target="_blank"
-              rel="noopener noreferrer"
-            >公式X @MyKyudoNote</a>
-          </div>
+          <h2>主な更新内容</h2>
+          <ul>
+            <li>記録画面を、拡大・外周・中心・記録の分かりやすい流れへ整理</li>
+            <li>矢位置のドラッグ編集や、立ごとの散布図表示を改善</li>
+            <li>使用道具・射場の選択と、矢セットごとの重量履歴管理を改善</li>
+            <li>朝・昼・夜の稽古分類と、履歴での時間帯表示に対応</li>
+            <li>クラシック・モノアイのテーマカラーを各12色へ拡張</li>
+            <li>霞的・弽・矢を組み合わせた新しいアプリアイコンへ更新</li>
+          </ul>
         </article>
+
+        <article class="content-card">
+          <h2>互換性</h2>
+          <p>
+            既存の記録、プロフィール、道具、テーマ設定、バックアップを
+            引き続き利用できます。今回の最終更新ではDB Schema、
+            Migration、バックアップ形式を変更していません。
+          </p>
+        </article>
+
+        <div class="button-row">
+          <a class="button" href="./">リリース一覧へ戻る</a>
+          <a class="button button-secondary" href="../support.html">サポートを見る</a>
+        </div>
       </div>
     </section>
   </main>

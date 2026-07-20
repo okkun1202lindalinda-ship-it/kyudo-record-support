@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import re
+import struct
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -19,6 +20,13 @@ CONTRAST_PAIRS = {
     "主要ボタン": ("#ffffff", "#46689b"),
     "本文（Dark）": ("#f4f7fb", "#0f1622"),
     "補助文（Dark）": ("#b6c1cf", "#0f1622"),
+}
+PNG_ASSETS = {
+    "assets/icons/app-icon-source.png": (1024, 1024),
+    "assets/icons/apple-touch-icon.png": (180, 180),
+    "assets/icons/favicon-32.png": (32, 32),
+    "assets/icons/icon-192.png": (192, 192),
+    "assets/social/x-profile-icon-800x800.png": (800, 800),
 }
 
 
@@ -146,6 +154,22 @@ def contrast_ratio(foreground: str, background: str) -> float:
     return (lighter + 0.05) / (darker + 0.05)
 
 
+def validate_png(path: Path, expected_size: tuple[int, int]) -> list[str]:
+    data = path.read_bytes()
+    if not data.startswith(b"\x89PNG\r\n\x1a\n") or len(data) < 26:
+        return [f"{path.relative_to(ROOT)}: PNG形式ではない"]
+    width, height = struct.unpack(">II", data[16:24])
+    errors = []
+    if (width, height) != expected_size:
+        errors.append(
+            f"{path.relative_to(ROOT)}: "
+            f"{width}x{height}（期待値 {expected_size[0]}x{expected_size[1]}）"
+        )
+    if data[25] in {4, 6}:
+        errors.append(f"{path.relative_to(ROOT)}: アルファチャンネルが残っている")
+    return errors
+
+
 def main() -> int:
     errors: list[str] = []
     for page in HTML_FILES:
@@ -176,6 +200,13 @@ def main() -> int:
     for asset in required_assets:
         if not asset.exists():
             errors.append(f"必須アセットがない: {asset.relative_to(ROOT)}")
+
+    for relative_path, expected_size in PNG_ASSETS.items():
+        asset = ROOT / relative_path
+        if not asset.exists():
+            errors.append(f"必須アセットがない: {relative_path}")
+        else:
+            errors.extend(validate_png(asset, expected_size))
 
     contrast_results = {
         name: contrast_ratio(foreground, background)

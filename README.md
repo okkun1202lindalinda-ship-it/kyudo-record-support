@@ -53,7 +53,7 @@ GitHub Pagesで公開する静的Webサイトです。
 
 - News：トップページの `News` カードを記事一覧へのリンクへ変更します。
 - DLC：トップページのDLCカードから、追加機能の紹介・購入案内ページへ接続します。
-- Subscription：Subscriptionカードから、対象者、機能、料金表、規約へ接続します。
+- Subscription：提供内容が確定した段階で、必要な案内ページへ接続します。
 - 公開前の内容は必ず「準備中」または「将来対応」と明示します。
 
 ## リリースノートの追加
@@ -71,7 +71,7 @@ XロゴはX公式ブランドツールキットから取得した素材をその
 利用時はXのブランドガイドラインに従います。
 
 プロフィール画像：
-`assets/social/x-profile-icon-400x400.png`
+`assets/social/x-profile-icon-800x800.png`
 
 ## Xヘッダー・OGP画像の再生成
 
@@ -97,7 +97,7 @@ xcrun swiftc -parse-as-library scripts/generate_x_header.swift \
 python3 scripts/check_site.py
 ```
 
-## v7.0のプライバシー実装
+## v7.1のプライバシー実装
 
 - 練習記録、プロフィール、道具、ノート、設定、画像は端末内へ保存する
 - 写真は利用者が写真ライブラリから選択したものだけを使用する
