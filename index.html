@@ -3,100 +3,361 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>自分だけの弓道ノート｜公式サポート</title>
+  <meta name="theme-color" content="#46689b">
+  <title>自分だけの弓道ノート｜公式サイト</title>
   <meta
     name="description"
-    content="自分だけの弓道ノートは、日々の弓道練習を記録し、成長を振り返るための弓道専用アプリです。"
+    content="稽古、道具、成長を一冊のノートとして残す弓道専用アプリ「自分だけの弓道ノート」の公式サイトです。"
   >
-  <link rel="stylesheet" href="styles.css">
+  <link
+    rel="canonical"
+    href="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/"
+  >
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="自分だけの弓道ノート">
+  <meta property="og:title" content="自分だけの弓道ノート｜公式サイト">
+  <meta
+    property="og:description"
+    content="自分の弓道史を共に歩むツール。稽古、道具、成長を一冊のノートとして残します。"
+  >
+  <meta
+    property="og:url"
+    content="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/"
+  >
+  <meta
+    property="og:image"
+    content="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/assets/images/ogp-1200x630.png"
+  >
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@MyKyudoNote">
+  <meta name="twitter:title" content="自分だけの弓道ノート｜公式サイト">
+  <meta
+    name="twitter:description"
+    content="自分の弓道史を共に歩むツール。稽古、道具、成長を一冊のノートとして残します。"
+  >
+  <meta
+    name="twitter:image"
+    content="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/assets/images/ogp-1200x630.png"
+  >
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav aria-label="メインナビゲーション">
-        <a href="index.html">ホーム</a>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html" aria-label="自分だけの弓道ノート 公式サイト">
+        <img src="assets/icons/icon-192.png" alt="" width="42" height="42">
+        <span>自分だけの弓道ノート</span>
+      </a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="メニューを開く"
+        aria-expanded="false"
+        aria-controls="site-navigation"
+        data-nav-toggle
+      >
+        ☰
+      </button>
+      <nav
+        class="site-nav"
+        id="site-navigation"
+        aria-label="メインナビゲーション"
+        data-site-nav
+      >
+        <a href="index.html" aria-current="page">ホーム</a>
+        <a href="#features">機能</a>
+        <a href="#download">ダウンロード</a>
+        <a href="releases/">リリースノート</a>
         <a href="support.html">サポート</a>
         <a href="privacy.html">プライバシー</a>
       </nav>
-      <div class="hero">
-        <span class="badge">弓道専用の記録・分析アプリ</span>
-        <h1>自分だけの<br>弓道ノート</h1>
-        <p>
-          自分だけの弓道ノートは、<br>
-          日々の弓道練習を記録し、<br>
-          成長を振り返るための弓道専用アプリです。
-        </p>
-      </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="card intro">
-      <p>
-        射数、的中率、練習内容、道具情報を記録し、
-        自分自身の課題や成長を確認できます。
-      </p>
-      <p>あなたの弓道人生を共に歩む記録ツールです。</p>
-    </section>
+  <main id="main-content">
+    <section class="portal-hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">弓道人のための記録・分析アプリ</p>
+          <h1>自分の弓道史を<br>共に歩むツール</h1>
+          <p class="hero-lead">
+            記録するだけでは終わらない。<br>
+            稽古、道具、成長。<br>
+            あなたの弓道人生を<br>
+            一冊のノートとして残します。
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#features">アプリを知る</a>
+            <a class="button button-secondary" href="support.html">使い方を見る</a>
+          </div>
+        </div>
 
-    <section aria-labelledby="features-title">
-      <h2 id="features-title">主な機能</h2>
-      <div class="grid">
-        <div class="card">
-          <h3>練習記録</h3>
-          <ul>
-            <li>射数</li>
-            <li>的中数</li>
-            <li>的中率</li>
-            <li>練習メモ</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>的中分析</h3>
-          <ul>
-            <li>的中位置記録</li>
-            <li>分布表示</li>
-            <li>統計分析</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>道具カルテ</h3>
-          <p>弓、矢、弦、弽の情報と履歴をまとめて管理できます。</p>
-          <p class="meta">セッション保存画面の矢羽柄単独入力は廃止しています。</p>
-        </div>
-        <div class="card">
-          <h3>バックアップ</h3>
-          <ul>
-            <li>端末内へのデータ保存</li>
-            <li>CSV書き出し</li>
-            <li>ZIPバックアップと復元</li>
-          </ul>
+        <div class="app-showcase" aria-label="アプリのホーム、記録、統計画面">
+          <figure class="phone-shot phone-shot-record">
+            <img
+              src="assets/images/app-record.jpg"
+              alt="一射ごとの着弾位置を記録する画面"
+              width="720"
+              height="1564"
+            >
+          </figure>
+          <figure class="phone-shot phone-shot-statistics">
+            <img
+              src="assets/images/app-statistics.jpg"
+              alt="射数、的中率、散布図を確認する統計画面"
+              width="720"
+              height="1564"
+            >
+          </figure>
+          <figure class="phone-shot phone-shot-home">
+            <img
+              src="assets/images/app-home.jpg"
+              alt="記録、履歴、統計へ移動できるホーム画面"
+              width="720"
+              height="1564"
+            >
+          </figure>
         </div>
       </div>
     </section>
 
-    <section class="card">
-      <h2>サポート</h2>
-      <p>
-        アプリの概要、詳しい使用方法、よくある質問、問い合わせ方法を
-        サポートページへまとめています。
-      </p>
-      <p><a class="button" href="support.html">サポートを見る</a></p>
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">できること</p>
+          <h2 id="features-title">日々の稽古を、あとから育てられる記録へ。</h2>
+          <p>
+            射の結果だけでなく、道具や気づきも一緒に残し、
+            時間の流れの中で成長を振り返れます。
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">的</span>
+            <h3>射位置記録</h3>
+            <p>写真または画面上の的へ、一射ごとの着弾位置を記録できます。</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">弓</span>
+            <h3>道具カルテ</h3>
+            <p>弓、矢、弦、弽の情報と使用履歴をまとめて管理できます。</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">率</span>
+            <h3>統計</h3>
+            <p>射数、的中率、推移、散布図から稽古の変化を確認できます。</p>
+          </article>
+          <article class="feature-card">
+            <span class="feature-icon" aria-hidden="true">省</span>
+            <h3>振り返り</h3>
+            <p>メモや履歴を通して、課題と成長を自分の言葉で残せます。</p>
+          </article>
+          <article class="feature-card feature-card-wide">
+            <span class="feature-icon" aria-hidden="true">保</span>
+            <h3>完全バックアップ</h3>
+            <p>
+              記録、プロフィール、設定、道具、ノート、保存画像をまとめて書き出し、
+              利用者自身の操作で復元できます。
+            </p>
+          </article>
+        </div>
+      </div>
     </section>
 
-    <section class="card">
-      <h2>プライバシー</h2>
-      <p>
-        本アプリは、入力された練習記録や画像を端末内に保存します。
-        広告、アナリティクス、外部アカウント登録は使用していません。
-      </p>
-      <p><a href="privacy.html">プライバシーポリシーを読む</a></p>
+    <section class="section section-soft" aria-labelledby="story-title">
+      <div class="container story-grid">
+        <div class="story-copy">
+          <p class="eyebrow">一冊のノートとして</p>
+          <h2 id="story-title">記録した瞬間が、完成ではありません。</h2>
+          <p>
+            稽古の記録へ後から道具や気づきを補い、
+            散布図や統計で見返すことで、日々の記録は自分だけの弓道史へ育っていきます。
+          </p>
+        </div>
+        <blockquote class="story-note">
+          「今日の一射」を、<br>
+          未来の自分へ残す。
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="download" aria-labelledby="download-title">
+      <div class="container download-grid">
+        <div class="download-copy">
+          <p class="eyebrow">Download</p>
+          <h2 id="download-title">ストア公開準備中</h2>
+          <p>
+            公開後は、この2つのボタンから各ストアへ移動できるようになります。
+            最新情報は公式Xでお知らせします。
+          </p>
+        </div>
+        <div class="store-buttons" aria-label="ダウンロードリンク（準備中）">
+          <!-- 公開後、spanをaへ変更してApp Store URLを設定します。 -->
+          <span class="store-button" role="link" aria-disabled="true">
+            App Store
+            <small>準備中</small>
+          </span>
+          <!-- 公開後、spanをaへ変更してGoogle Play URLを設定します。 -->
+          <span class="store-button" role="link" aria-disabled="true">
+            Google Play
+            <small>準備中</small>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight section-soft" aria-labelledby="x-title">
+      <div class="container">
+        <div class="x-card">
+          <span class="x-logo" aria-hidden="true">
+            <img src="assets/icons/x-logo-white.png" alt="" width="34" height="35">
+          </span>
+          <div class="x-copy">
+            <h2 id="x-title">公式X</h2>
+            <p>最新情報、アップデート、不具合情報、ご要望受付はこちら。</p>
+            <a
+              class="x-handle"
+              href="https://x.com/MyKyudoNote"
+              target="_blank"
+              rel="noopener noreferrer"
+            >@MyKyudoNote</a>
+          </div>
+          <a
+            class="button"
+            href="https://x.com/MyKyudoNote"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Xでフォロー</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" aria-labelledby="future-title">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Roadmap</p>
+          <h2 id="future-title">今後追加予定</h2>
+          <p>
+            弓道人の記録をより深く育てる機能を、段階的に追加していきます。
+          </p>
+        </div>
+        <ul class="roadmap-list">
+          <li>実績</li>
+          <li>巻藁モード</li>
+          <li>遠的</li>
+          <li>大会モード</li>
+          <li>ライブカメラ</li>
+          <li>AI自動認識</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="portal-title">
+      <div class="container">
+        <div class="section-heading center">
+          <p class="eyebrow">Official Portal</p>
+          <h2 id="portal-title">情報とサポートを、ここに集約。</h2>
+          <p>
+            リリースノートや追加コンテンツなど、今後の展開を同じ場所から確認できます。
+          </p>
+        </div>
+        <div class="future-grid">
+          <article class="future-card">
+            <span class="status">公開準備中</span>
+            <h3>News</h3>
+            <p>お知らせと重要な更新情報を掲載します。</p>
+          </article>
+          <article class="future-card">
+            <span class="status">構成済み</span>
+            <h3><a href="releases/">Release Notes</a></h3>
+            <p>バージョンごとの変更内容を掲載します。</p>
+          </article>
+          <article class="future-card">
+            <span class="status">将来対応</span>
+            <h3>DLC</h3>
+            <p>大会モードやAI自動認識などの追加機能を案内します。</p>
+          </article>
+          <article class="future-card">
+            <span class="status">将来対応</span>
+            <h3>Subscription</h3>
+            <p>組織・道場向けプランの内容と料金表を掲載できます。</p>
+          </article>
+          <article class="future-card">
+            <span class="status">公開中</span>
+            <h3><a href="support.html#faq">FAQ</a></h3>
+            <p>よくある質問とアプリの使い方を確認できます。</p>
+          </article>
+          <article class="future-card">
+            <span class="status">受付中</span>
+            <h3><a href="support.html#contact">お問い合わせ</a></h3>
+            <p>不具合、ご質問、ご意見の連絡方法をご案内します。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-tight section-soft" aria-labelledby="support-title">
+      <div class="container support-grid">
+        <div>
+          <div class="section-heading">
+            <p class="eyebrow">Support</p>
+            <h2 id="support-title">安心して、長く記録するために。</h2>
+            <p>使い方、FAQ、問い合わせ先、データの取り扱いを確認できます。</p>
+          </div>
+          <div class="button-row">
+            <a class="button" href="support.html">サポートを見る</a>
+            <a class="button button-secondary" href="privacy.html">プライバシー</a>
+          </div>
+        </div>
+        <img
+          class="support-screenshot"
+          src="assets/images/app-backup.jpg"
+          alt="バックアップを作成、復元する設定画面"
+          width="720"
+          height="1564"
+          loading="lazy"
+        >
+      </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>© 2026 自分だけの弓道ノート</p>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>自分だけの弓道ノート</h2>
+        <p>自分の弓道史を共に歩むツール。</p>
+      </div>
+      <div>
+        <h3>公式情報</h3>
+        <ul>
+          <li><a href="releases/">リリースノート</a></li>
+          <li>
+            <a
+              href="https://x.com/MyKyudoNote"
+              target="_blank"
+              rel="noopener noreferrer"
+            >公式X @MyKyudoNote</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3>サポート</h3>
+        <ul>
+          <li><a href="support.html">サポート・FAQ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© <span data-current-year>2026</span> 自分だけの弓道ノート</span>
+      <span>Simple. Clear. Built to last.</span>
     </div>
   </footer>
 </body>

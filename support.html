@@ -3,198 +3,306 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#46689b">
   <title>サポート｜自分だけの弓道ノート</title>
   <meta
     name="description"
     content="自分だけの弓道ノートの概要、主な機能、使用方法、FAQ、問い合わせ方法をご案内します。"
   >
-  <link rel="stylesheet" href="styles.css">
+  <link
+    rel="canonical"
+    href="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/support.html"
+  >
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="自分だけの弓道ノート">
+  <meta property="og:title" content="サポート｜自分だけの弓道ノート">
+  <meta
+    property="og:description"
+    content="使い方、FAQ、バックアップ、問い合わせ方法をご案内します。"
+  >
+  <meta
+    property="og:url"
+    content="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/support.html"
+  >
+  <meta
+    property="og:image"
+    content="https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/assets/images/ogp-1200x630.png"
+  >
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@MyKyudoNote">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="assets/css/site.css">
+  <script src="assets/js/site.js" defer></script>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <nav aria-label="メインナビゲーション">
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="index.html" aria-label="自分だけの弓道ノート 公式サイト">
+        <img src="assets/icons/icon-192.png" alt="" width="42" height="42">
+        <span>自分だけの弓道ノート</span>
+      </a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-label="メニューを開く"
+        aria-expanded="false"
+        aria-controls="site-navigation"
+        data-nav-toggle
+      >
+        ☰
+      </button>
+      <nav
+        class="site-nav"
+        id="site-navigation"
+        aria-label="メインナビゲーション"
+        data-site-nav
+      >
         <a href="index.html">ホーム</a>
-        <a href="support.html">サポート</a>
+        <a href="index.html#features">機能</a>
+        <a href="index.html#download">ダウンロード</a>
+        <a href="releases/">リリースノート</a>
+        <a href="support.html" aria-current="page">サポート</a>
         <a href="privacy.html">プライバシー</a>
       </nav>
-      <div class="hero">
-        <span class="badge">Support</span>
-        <h1>自分だけの弓道ノート<br>サポート</h1>
-        <p>アプリの概要、使い方、よくある質問をまとめています。</p>
-      </div>
     </div>
   </header>
 
-  <main class="container">
-    <section class="card">
-      <h2>アプリ概要</h2>
-      <p>
-        自分だけの弓道ノートは、日々の稽古を記録し、
-        自分自身の課題や成長を振り返るための弓道専用アプリです。
-      </p>
-      <p>
-        射数、的中結果、練習内容、道具情報をひとつにまとめ、
-        履歴や統計から長期的な変化を確認できます。
-      </p>
-    </section>
-
-    <section class="card">
-      <h2>主な機能</h2>
-
-      <h3>練習記録</h3>
-      <ul>
-        <li>射数、的中数、的中率</li>
-        <li>練習内容とメモ</li>
-        <li>写真を使った記録と画像なし記録</li>
-      </ul>
-
-      <h3>的中分析</h3>
-      <ul>
-        <li>的中位置の記録</li>
-        <li>散布図による分布表示</li>
-        <li>期間やセッションごとの統計分析</li>
-      </ul>
-
-      <h3>道具カルテ</h3>
-      <ul>
-        <li>弓</li>
-        <li>矢</li>
-        <li>弦</li>
-        <li>弽</li>
-      </ul>
-      <p class="meta">
-        セッション保存画面では使用した道具名だけを記録します。
-        矢羽柄の単独入力欄は廃止しています。
-      </p>
-
-      <h3>データ管理</h3>
-      <ul>
-        <li>端末内へのデータ保存</li>
-        <li>CSV書き出し</li>
-        <li>ZIPバックアップの保存と復元</li>
-      </ul>
-    </section>
-
-    <section class="card">
-      <h2>使用方法</h2>
-
-      <h3>1. 初期設定を行う</h3>
-      <p>
-        初回起動時の案内に沿ってプロフィールを登録します。
-        弓道の開始年月、段位、称号は後からプロフィール画面で変更できます。
-      </p>
-
-      <h3>2. 新しい記録を始める</h3>
-      <p>
-        ホーム画面の「記録」から、写真を使う方法または画像なしで記録する方法を選びます。
-      </p>
-
-      <h3>3. 的中位置を記録する</h3>
-      <p>
-        写真を使う場合は的の中心・大きさ・傾きを写真に合わせ、
-        記録モードで着弾位置をタップします。写真を使わない場合は、
-        画面上の的へ直接記録できます。
-      </p>
-
-      <h3>4. セッションを保存する</h3>
-      <p>
-        記録日、射場、使用した弓・矢・弦・弽、練習メモを確認して保存します。
-      </p>
-
-      <h3>5. 履歴と統計を確認する</h3>
-      <p>
-        履歴では練習セッションの確認・編集ができます。
-        統計では射数、的中率、推移、散布図、道具別の集計を確認できます。
-      </p>
-
-      <h3>6. 道具を登録する</h3>
-      <p>
-        道具カルテから弓、矢、弦、弽を登録し、詳細情報や使用履歴を管理します。
-      </p>
-    </section>
-
-    <section class="card">
-      <h2>バックアップと復元</h2>
-
-      <h3>CSVを書き出す</h3>
-      <p>
-        設定画面のCSV書き出しから、ファイルアプリ、AirDrop、メールなどへ共有できます。
-      </p>
-
-      <h3>ZIPバックアップを保存する</h3>
-      <p>
-        設定画面から、記録、プロフィール、設定、道具、保存画像を含む
-        ZIPバックアップを作成して共有できます。
-      </p>
-
-      <h3>ZIPバックアップを復元する</h3>
-      <p>
-        設定画面のバックアップ復元から、以前に本アプリで作成したZIPを選択します。
-      </p>
-
-      <div class="notice">
-        復元すると現在の内容がバックアップ時点の内容へ置き換わります。
-        重要な記録がある場合は、復元前に新しいZIPバックアップを作成してください。
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Support</p>
+        <h1>自分だけの弓道ノート<br>サポート</h1>
+        <p>アプリの概要、使い方、よくある質問、問い合わせ方法をまとめています。</p>
       </div>
     </section>
 
-    <section class="card">
-      <h2>FAQ</h2>
+    <section class="section">
+      <div class="container narrow content-stack">
+        <article class="content-card">
+          <h2>アプリ概要</h2>
+          <p>
+            自分だけの弓道ノートは、日々の稽古を記録し、
+            自分自身の課題や成長を振り返るための弓道専用アプリです。
+          </p>
+          <p>
+            射数、的中結果、練習内容、道具情報をひとつにまとめ、
+            履歴や統計から長期的な変化を確認できます。
+          </p>
+        </article>
 
-      <h3>記録はインターネットへ送信されますか？</h3>
-      <p>
-        自動送信されません。記録、画像、メモ、設定は端末内に保存されます。
-      </p>
+        <article class="content-card">
+          <h2>主な機能</h2>
 
-      <h3>写真を使わずに記録できますか？</h3>
-      <p>はい。画像なし記録に対応しています。</p>
+          <h3>練習記録</h3>
+          <ul>
+            <li>射数、的中数、的中率</li>
+            <li>練習内容とメモ</li>
+            <li>写真を使った記録と画像なし記録</li>
+          </ul>
 
-      <h3>端末を変更しても記録を移せますか？</h3>
-      <p>
-        古い端末でZIPバックアップを作成し、新しい端末でそのZIPを復元してください。
-      </p>
+          <h3>的中分析</h3>
+          <ul>
+            <li>的中位置の記録</li>
+            <li>散布図による分布表示</li>
+            <li>期間やセッションごとの統計分析</li>
+          </ul>
 
-      <h3>アプリを削除すると記録は残りますか？</h3>
-      <p>
-        通常、アプリを削除すると端末内の記録も削除されます。
-        削除前にZIPバックアップを保存してください。
-      </p>
+          <h3>道具カルテ</h3>
+          <ul>
+            <li>弓</li>
+            <li>矢</li>
+            <li>弦</li>
+            <li>弽</li>
+          </ul>
+          <p class="meta">
+            セッション保存画面では使用した道具名だけを記録します。
+            矢羽柄の単独入力欄は廃止しています。
+          </p>
 
-      <h3>位置情報は保存されますか？</h3>
-      <p>現在地の記録、保存、追跡、外部送信は行いません。</p>
+          <h3>データ管理</h3>
+          <ul>
+            <li>端末内へのデータ保存</li>
+            <li>CSV書き出し</li>
+            <li>ZIPバックアップの保存と復元</li>
+          </ul>
+        </article>
 
-      <h3>アプリから直接カメラを起動できますか？</h3>
-      <p>
-        現行バージョン7.0ではカメラ撮影機能を提供していません。
-        記録用画像は、利用者が写真ライブラリから選択します。
-      </p>
+        <article class="content-card">
+          <h2>使用方法</h2>
 
-      <h3>モノアイテーマとは何ですか？</h3>
-      <p>
-        モノアイのイラストと専用配色を使った表示テーマです。
-        設定画面からClassicテーマと切り替えられます。
-      </p>
-    </section>
+          <h3>1. 初期設定を行う</h3>
+          <p>
+            初回起動時の案内に沿ってプロフィールを登録します。
+            弓道の開始年月、段位、称号は後からプロフィール画面で変更できます。
+          </p>
 
-    <section class="card">
-      <h2>お問い合わせ</h2>
-      <p>
-        不具合、ご質問、ご意見は以下のメールアドレスへご連絡ください。
-        端末名、OSバージョン、アプリのVersion / Build、
-        問題が起きた操作を添えていただくと確認がスムーズです。
-      </p>
-      <p>
-        <a href="mailto:okkun1202.linda.linda@gmail.com">
-          okkun1202.linda.linda@gmail.com
-        </a>
-      </p>
+          <h3>2. 新しい記録を始める</h3>
+          <p>
+            ホーム画面の「記録」から、写真を使う方法または画像なしで記録する方法を選びます。
+          </p>
+
+          <h3>3. 的中位置を記録する</h3>
+          <p>
+            写真を使う場合は、画面の案内に沿って画像の拡大、的の外周、
+            中心位置を調整し、記録ステップで着弾位置をタップします。
+            写真を使わない場合は、画面上の的へ直接記録できます。
+          </p>
+
+          <h3>4. セッションを保存する</h3>
+          <p>
+            記録日、射場、使用した弓・矢・弦・弽、射のメモを確認して保存します。
+          </p>
+
+          <h3>5. 履歴と統計を確認する</h3>
+          <p>
+            履歴では練習セッションの確認・編集ができます。
+            統計では射数、的中率、推移、散布図、道具別の集計を確認できます。
+          </p>
+
+          <h3>6. 道具を登録する</h3>
+          <p>
+            道具カルテから弓、矢、弦、弽を登録し、詳細情報や使用履歴を管理します。
+          </p>
+        </article>
+
+        <article class="content-card">
+          <h2>バックアップと復元</h2>
+
+          <h3>CSVを書き出す</h3>
+          <p>
+            設定画面のCSV書き出しから、ファイルアプリ、AirDrop、メールなどへ共有できます。
+          </p>
+
+          <h3>ZIPバックアップを保存する</h3>
+          <p>
+            設定画面から、記録、プロフィール、設定、道具、保存画像を含む
+            ZIPバックアップを作成して共有できます。
+          </p>
+
+          <h3>ZIPバックアップを復元する</h3>
+          <p>
+            設定画面のバックアップ復元から、以前に本アプリで作成したZIPを選択します。
+          </p>
+
+          <div class="notice">
+            復元すると現在の内容がバックアップ時点の内容へ置き換わります。
+            重要な記録がある場合は、復元前に新しいZIPバックアップを作成してください。
+          </div>
+        </article>
+
+        <article class="content-card" id="faq">
+          <h2>FAQ</h2>
+
+          <h3>記録はインターネットへ送信されますか？</h3>
+          <p>
+            自動送信されません。記録、画像、メモ、設定は端末内に保存されます。
+          </p>
+
+          <h3>写真を使わずに記録できますか？</h3>
+          <p>はい。画像なし記録に対応しています。</p>
+
+          <h3>端末を変更しても記録を移せますか？</h3>
+          <p>
+            古い端末でZIPバックアップを作成し、新しい端末でそのZIPを復元してください。
+          </p>
+
+          <h3>アプリを削除すると記録は残りますか？</h3>
+          <p>
+            通常、アプリを削除すると端末内の記録も削除されます。
+            削除前にZIPバックアップを保存してください。
+          </p>
+
+          <h3>位置情報は保存されますか？</h3>
+          <p>現在地の記録、保存、追跡、外部送信は行いません。</p>
+
+          <h3>アプリから直接カメラを起動できますか？</h3>
+          <p>
+            現行バージョン7.0ではカメラ撮影機能を提供していません。
+            記録用画像は、利用者が写真ライブラリから選択します。
+          </p>
+
+          <h3>モノアイテーマとは何ですか？</h3>
+          <p>
+            モノアイのイラストと専用配色を使った表示テーマです。
+            設定画面からClassicテーマと切り替えられます。
+          </p>
+        </article>
+
+        <section class="official-x-panel" aria-labelledby="support-x-title">
+          <div class="x-card">
+            <span class="x-logo" aria-hidden="true">
+              <img src="assets/icons/x-logo-black.png" alt="" width="34" height="35">
+            </span>
+            <div class="x-copy">
+              <h2 id="support-x-title">公式X</h2>
+              <p>最新情報、アップデート、不具合情報、ご要望受付はこちら。</p>
+              <a
+                class="x-handle"
+                href="https://x.com/MyKyudoNote"
+                target="_blank"
+                rel="noopener noreferrer"
+              >@MyKyudoNote</a>
+            </div>
+            <a
+              class="button"
+              href="https://x.com/MyKyudoNote"
+              target="_blank"
+              rel="noopener noreferrer"
+            >公式Xを開く</a>
+          </div>
+        </section>
+
+        <article class="content-card" id="contact">
+          <h2>お問い合わせ</h2>
+          <p>
+            不具合、ご質問、ご意見は以下のメールアドレスへご連絡ください。
+            端末名、OSバージョン、アプリのVersion / Build、
+            問題が起きた操作を添えていただくと確認がスムーズです。
+          </p>
+          <p>
+            <a href="mailto:okkun1202.linda.linda@gmail.com">
+              okkun1202.linda.linda@gmail.com
+            </a>
+          </p>
+        </article>
+      </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>© 2026 自分だけの弓道ノート</p>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>自分だけの弓道ノート</h2>
+        <p>自分の弓道史を共に歩むツール。</p>
+      </div>
+      <div>
+        <h3>公式情報</h3>
+        <ul>
+          <li><a href="releases/">リリースノート</a></li>
+          <li>
+            <a
+              href="https://x.com/MyKyudoNote"
+              target="_blank"
+              rel="noopener noreferrer"
+            >公式X @MyKyudoNote</a>
+          </li>
+        </ul>
+      </div>
+      <div>
+        <h3>サポート</h3>
+        <ul>
+          <li><a href="support.html">サポート・FAQ</a></li>
+          <li><a href="privacy.html">プライバシーポリシー</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span>© <span data-current-year>2026</span> 自分だけの弓道ノート</span>
+      <a href="index.html">公式サイトへ戻る</a>
     </div>
   </footer>
 </body>

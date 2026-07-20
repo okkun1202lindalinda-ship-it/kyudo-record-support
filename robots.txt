@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/sitemap.xml
