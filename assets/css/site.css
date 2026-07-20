@@ -396,19 +396,6 @@ main {
   color: var(--color-muted);
 }
 
-.feature-icon {
-  display: inline-grid;
-  width: 46px;
-  height: 46px;
-  place-items: center;
-  margin-bottom: 18px;
-  border-radius: 14px;
-  color: var(--color-brand-strong);
-  background: var(--color-brand-soft);
-  font-size: 23px;
-  font-weight: 900;
-}
-
 .feature-card-wide {
   grid-column: span 2;
 }
