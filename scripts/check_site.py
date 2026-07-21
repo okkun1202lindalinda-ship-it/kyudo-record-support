@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import struct
 import sys
@@ -13,6 +14,8 @@ from urllib.parse import unquote, urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 HTML_FILES = sorted(ROOT.glob("*.html")) + sorted((ROOT / "releases").glob("*.html"))
+SITE_ORIGIN = "https://kyudojapan.net"
+LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SKIP_SCHEMES = {"http", "https", "mailto", "tel", "data"}
 CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
@@ -26,6 +29,7 @@ PNG_ASSETS = {
     "assets/icons/apple-touch-icon.png": (180, 180),
     "assets/icons/favicon-32.png": (32, 32),
     "assets/icons/icon-192.png": (192, 192),
+    "assets/icons/icon-512.png": (512, 512),
     "assets/social/x-profile-icon-800x800.png": (800, 800),
 }
 
@@ -39,7 +43,15 @@ class PageParser(HTMLParser):
         self.title_depth = 0
         self.title_text: list[str] = []
         self.has_description = False
-        self.has_canonical = False
+        self.canonical = ""
+        self.og_url = ""
+        self.og_image = ""
+        self.og_site_name = ""
+        self.twitter_url = ""
+        self.twitter_image = ""
+        self.has_manifest = False
+        self.has_favicon = False
+        self.has_apple_touch_icon = False
         self.x_links = 0
 
     def handle_starttag(
@@ -58,8 +70,28 @@ class PageParser(HTMLParser):
         if tag == "meta" and values.get("name") == "description":
             self.has_description = bool(values.get("content"))
 
-        if tag == "link" and values.get("rel") == "canonical":
-            self.has_canonical = bool(values.get("href"))
+        if tag == "link":
+            rel = set((values.get("rel") or "").split())
+            if "canonical" in rel:
+                self.canonical = values.get("href") or ""
+            if "manifest" in rel:
+                self.has_manifest = bool(values.get("href"))
+            if "icon" in rel:
+                self.has_favicon = bool(values.get("href"))
+            if "apple-touch-icon" in rel:
+                self.has_apple_touch_icon = bool(values.get("href"))
+
+        if tag == "meta":
+            if values.get("property") == "og:url":
+                self.og_url = values.get("content") or ""
+            if values.get("property") == "og:image":
+                self.og_image = values.get("content") or ""
+            if values.get("property") == "og:site_name":
+                self.og_site_name = values.get("content") or ""
+            if values.get("name") == "twitter:url":
+                self.twitter_url = values.get("content") or ""
+            if values.get("name") == "twitter:image":
+                self.twitter_image = values.get("content") or ""
 
         if tag == "img":
             if "alt" not in values:
@@ -106,8 +138,38 @@ def validate_page(path: Path) -> list[str]:
         errors.append("titleがない")
     if not parser.has_description:
         errors.append("meta descriptionがない")
-    if not parser.has_canonical:
+    if not parser.canonical:
         errors.append("canonicalがない")
+
+    relative = path.relative_to(ROOT).as_posix()
+    canonical_paths = {
+        "index.html": "/",
+        "support.html": "/support.html",
+        "privacy.html": "/privacy.html",
+        "404.html": "/404.html",
+        "releases/index.html": "/releases/",
+        "releases/v7-1-0.html": "/releases/v7-1-0.html",
+    }
+    expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
+    if parser.canonical and parser.canonical != expected_url:
+        errors.append(f"canonicalが独自ドメインURLではない: {parser.canonical}")
+    if parser.og_url != expected_url:
+        errors.append(f"og:urlが不正: {parser.og_url or '(なし)'}")
+    if parser.og_site_name != "Kyudo JAPAN":
+        errors.append(f"og:site_nameが不正: {parser.og_site_name or '(なし)'}")
+    if parser.twitter_url != expected_url:
+        errors.append(f"twitter:urlが不正: {parser.twitter_url or '(なし)'}")
+    expected_image = f"{SITE_ORIGIN}/assets/images/ogp-1200x630.png"
+    if parser.og_image != expected_image:
+        errors.append(f"og:imageが不正: {parser.og_image or '(なし)'}")
+    if parser.twitter_image != expected_image:
+        errors.append(f"twitter:imageが不正: {parser.twitter_image or '(なし)'}")
+    if not parser.has_manifest:
+        errors.append("Web Manifestへのリンクがない")
+    if not parser.has_favicon:
+        errors.append("faviconへのリンクがない")
+    if not parser.has_apple_touch_icon:
+        errors.append("apple-touch-iconへのリンクがない")
 
     duplicate_ids = {item for item in parser.ids if parser.ids.count(item) > 1}
     if duplicate_ids:
@@ -174,6 +236,68 @@ def main() -> int:
     errors: list[str] = []
     for page in HTML_FILES:
         errors.extend(validate_page(page))
+
+    cname = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
+    if cname != "kyudojapan.net":
+        errors.append(f"CNAMEが不正: {cname}")
+
+    manifest_path = ROOT / "manifest.webmanifest"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        errors.append(f"Web Manifestを読み込めない: {error}")
+        manifest = {}
+    for key, expected in {"id": "/", "start_url": "/", "scope": "/"}.items():
+        if manifest.get(key) != expected:
+            errors.append(f"Web Manifestの{key}が不正")
+    icon_sizes = {icon.get("sizes") for icon in manifest.get("icons", [])}
+    if not {"192x192", "512x512"}.issubset(icon_sizes):
+        errors.append("Web Manifestに192px・512pxアイコンがない")
+
+    index_source = (ROOT / "index.html").read_text(encoding="utf-8")
+    json_ld_match = re.search(
+        r'<script type="application/ld\+json">(?P<body>.*?)</script>',
+        index_source,
+        flags=re.DOTALL,
+    )
+    if json_ld_match is None:
+        errors.append("トップページにJSON-LDがない")
+    else:
+        try:
+            json_ld = json.loads(json_ld_match.group("body"))
+        except json.JSONDecodeError as error:
+            errors.append(f"JSON-LDが不正: {error}")
+        else:
+            serialized = json.dumps(json_ld, ensure_ascii=False)
+            if '"@type": "Organization"' not in serialized:
+                errors.append("JSON-LDにOrganizationがない")
+            if '"@type": "WebSite"' not in serialized:
+                errors.append("JSON-LDにWebSiteがない")
+            if f'"url": "{SITE_ORIGIN}/"' not in serialized:
+                errors.append("JSON-LDのURLが独自ドメインではない")
+
+    robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
+    if "Host: kyudojapan.net" not in robots:
+        errors.append("robots.txtのHostが不正")
+    if f"Sitemap: {SITE_ORIGIN}/sitemap.xml" not in robots:
+        errors.append("robots.txtのSitemapが不正")
+
+    sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    if LEGACY_ORIGIN in sitemap or f"<loc>{SITE_ORIGIN}/</loc>" not in sitemap:
+        errors.append("sitemap.xmlのURLが独自ドメインへ統一されていない")
+
+    text_extensions = {".html", ".md", ".xml", ".txt", ".yml", ".webmanifest"}
+    for source in ROOT.rglob("*"):
+        if ".git" in source.parts or not source.is_file() or source.suffix not in text_extensions:
+            continue
+        source_text = source.read_text(encoding="utf-8")
+        documented_dns_target = (
+            source.name == "README.md"
+            and source_text.count(LEGACY_ORIGIN) == 1
+            and f"`{LEGACY_ORIGIN}` へ向けます" in source_text
+        )
+        if LEGACY_ORIGIN in source_text and not documented_dns_target:
+            errors.append(f"旧github.io URLが残っている: {source.relative_to(ROOT)}")
 
     stylesheet = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
     if re.search(r"object-fit\s*:\s*fill\b", stylesheet):

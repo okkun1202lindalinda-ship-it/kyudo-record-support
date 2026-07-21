@@ -1,16 +1,18 @@
-# 自分だけの弓道ノート 公式サイト
+# Kyudo JAPAN 公式サイト
 
 「自分だけの弓道ノート」の公式ポータル、サポート、プライバシーポリシーを
 GitHub Pagesで公開する静的Webサイトです。
 
 公開URL：
-`https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/`
+`https://kyudojapan.net/`
 
 ## サイト構成
 
 ```text
 /
+├── CNAME                     # GitHub Pages独自ドメイン
 ├── index.html                 # 公式ポータル
+├── 404.html                   # 独自404ページ
 ├── support.html               # 使い方・FAQ・問い合わせ・公式X
 ├── privacy.html               # プライバシーポリシー
 ├── assets/
@@ -26,6 +28,7 @@ GitHub Pagesで公開する静的Webサイトです。
 ├── scripts/
 │   └── generate_x_header.swift
 ├── robots.txt
+├── manifest.webmanifest
 └── sitemap.xml
 ```
 
@@ -37,6 +40,32 @@ GitHub Pagesで公開する静的Webサイトです。
 - `prefers-color-scheme: dark`で文字と背景のコントラストを維持する
 - `prefers-reduced-motion: reduce`で不要な動きを抑制する
 - App Store ConnectのSupport URLとPrivacy Policy URLが公開ページと一致する
+
+## 独自ドメインの切り替え
+
+公開ドメインは `kyudojapan.net` です。DNS側では、apexドメインの既存Aレコードを
+GitHub Pagesの次の4レコードへ置き換えます。
+
+```text
+185.199.108.153
+185.199.109.153
+185.199.110.153
+185.199.111.153
+```
+
+`www` を利用する場合は、`www.kyudojapan.net` のCNAMEを
+`okkun1202lindalinda-ship-it.github.io` へ向けます。GitHubのドメイン所有確認用TXTは
+GitHub Pages設定画面で表示された値を登録し、確認後も削除しません。
+
+DNS反映後、Repository SettingsのPagesでCustom domainを`kyudojapan.net`へ設定し、
+HTTPSが利用可能になってからEnforce HTTPSを有効にします。DNS反映には最大24時間、
+HTTPS証明書の発行には追加で時間がかかる場合があります。
+
+## GitHub Actions
+
+`.github/workflows/pages.yml`は、push時に`python3 scripts/check_site.py`を実行し、
+成功した静的ファイルだけをGitHub Pagesへ配布します。利用開始時にRepository Settingsの
+Pages / Build and deployment / Sourceを`GitHub Actions`へ変更します。
 
 ## App Store・Google Playリンクの追加
 
@@ -59,8 +88,7 @@ GitHub Pagesで公開する静的Webサイトです。
 ## リリースノートの追加
 
 `releases/README.md` の手順に沿って、バージョン単位のHTMLを追加します。
-既存ページへのリンクは相対パスを使い、GitHub Pagesの
-`/kyudo-record-support/` 配下でも動作する状態を維持します。
+既存ページへのリンクは相対パスを使い、独自ドメイン直下でも動作する状態を維持します。
 
 ## 公式X
 

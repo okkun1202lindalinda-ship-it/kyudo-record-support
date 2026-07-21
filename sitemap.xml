@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/</loc>
+    <loc>https://kyudojapan.net/</loc>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/support.html</loc>
+    <loc>https://kyudojapan.net/support.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/privacy.html</loc>
+    <loc>https://kyudojapan.net/privacy.html</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/releases/</loc>
+    <loc>https://kyudojapan.net/releases/</loc>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://okkun1202lindalinda-ship-it.github.io/kyudo-record-support/releases/v7-1-0.html</loc>
+    <loc>https://kyudojapan.net/releases/v7-1-0.html</loc>
     <priority>0.6</priority>
   </url>
 </urlset>
