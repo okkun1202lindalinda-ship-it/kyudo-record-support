@@ -39,10 +39,46 @@ SITEMAP_ENTRIES = (
         "0.7",
     ),
     SitemapEntry(
+        "releases/v7-2-1.html",
+        "/releases/v7-2-1.html",
+        "2026-07-22",
+        "0.6",
+    ),
+    SitemapEntry(
+        "releases/v7-2-0.html",
+        "/releases/v7-2-0.html",
+        "2026-07-22",
+        "0.6",
+    ),
+    SitemapEntry(
+        "releases/v7-1-3.html",
+        "/releases/v7-1-3.html",
+        "2026-07-22",
+        "0.6",
+    ),
+    SitemapEntry(
+        "releases/v7-1-2.html",
+        "/releases/v7-1-2.html",
+        "2026-07-22",
+        "0.6",
+    ),
+    SitemapEntry(
+        "releases/v7-1-1.html",
+        "/releases/v7-1-1.html",
+        "2026-07-22",
+        "0.6",
+    ),
+    SitemapEntry(
         "releases/v7-1-0.html",
         "/releases/v7-1-0.html",
         "2026-07-22",
         "0.6",
+    ),
+    SitemapEntry(
+        "releases/v7-0-0.html",
+        "/releases/v7-0-0.html",
+        "2026-07-22",
+        "0.5",
     ),
 )
 

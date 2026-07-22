@@ -364,8 +364,15 @@ main {
   gap: 20px;
 }
 
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
 .feature-card,
 .future-card,
+.platform-card,
 .content-card,
 .link-card,
 .x-card {
@@ -377,12 +384,14 @@ main {
 
 .feature-card,
 .future-card,
+.platform-card,
 .link-card {
   padding: 26px;
 }
 
 .feature-card h3,
 .future-card h3,
+.platform-card h2,
 .link-card h3 {
   margin: 0 0 8px;
   font-size: 21px;
@@ -391,6 +400,7 @@ main {
 
 .feature-card p,
 .future-card p,
+.platform-card p,
 .link-card p {
   margin: 0;
   color: var(--color-muted);
@@ -468,6 +478,23 @@ main {
   display: block;
   font-size: 12px;
   font-weight: 700;
+}
+
+.store-button strong {
+  display: block;
+  color: var(--color-text);
+  font-size: 16px;
+}
+
+.platform-version {
+  margin: 0 0 6px;
+  color: var(--color-text) !important;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.platform-note {
+  font-size: 14px;
 }
 
 .x-card {
@@ -865,6 +892,7 @@ main {
 
   .feature-grid,
   .future-grid,
+  .platform-grid,
   .link-grid,
   .story-grid,
   .download-grid,

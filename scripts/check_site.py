@@ -181,7 +181,13 @@ def validate_page(path: Path) -> list[str]:
         "privacy/index.html": "/privacy",
         "404.html": "/404.html",
         "releases/index.html": "/releases/",
+        "releases/v7-0-0.html": "/releases/v7-0-0.html",
         "releases/v7-1-0.html": "/releases/v7-1-0.html",
+        "releases/v7-1-1.html": "/releases/v7-1-1.html",
+        "releases/v7-1-2.html": "/releases/v7-1-2.html",
+        "releases/v7-1-3.html": "/releases/v7-1-3.html",
+        "releases/v7-2-0.html": "/releases/v7-2-0.html",
+        "releases/v7-2-1.html": "/releases/v7-2-1.html",
         "releases/v7-2-2.html": "/releases/v7-2-2.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"

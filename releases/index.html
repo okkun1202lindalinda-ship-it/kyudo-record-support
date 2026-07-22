@@ -82,12 +82,29 @@
       <div class="container">
         <p class="eyebrow">Release Notes</p>
         <h1>更新履歴</h1>
-        <p>正式リリース後、バージョンごとの変更内容をこのページへ掲載します。</p>
+        <p>各OSの公開状況と、これまでの全バージョンの変更内容を掲載します。</p>
       </div>
     </section>
 
     <section class="section">
       <div class="container narrow content-stack">
+        <div class="platform-grid" aria-label="各OSの現行バージョン">
+          <article class="platform-card">
+            <span class="status">2026/7/23公開予定</span>
+            <h2>iOS</h2>
+            <p class="platform-version">現行公開版：なし（初回公開前）</p>
+            <p>公開予定版：Version 7.1.0</p>
+            <p class="platform-note">2026/7/23 9:10（日本時間）公開予定</p>
+          </article>
+          <article class="platform-card">
+            <span class="status">公開準備中</span>
+            <h2>Android</h2>
+            <p class="platform-version">現行公開版：なし</p>
+            <p>最新リリース候補：Version 7.2.2（Build 13）</p>
+            <p class="platform-note">Google Playへの公開はまだ行っていません。</p>
+          </article>
+        </div>
+
         <!--
           新しいリリースを追加する手順:
           1. releases/v7-0-0.html のようなページを作成
@@ -95,7 +112,7 @@
           3. index.html の News / Release Notes カードも必要に応じて更新
         -->
         <article class="content-card">
-          <span class="status">最新バージョン</span>
+          <span class="status">最新開発版・Androidリリース候補</span>
           <h2><a href="v7-2-2.html">Version 7.2.2</a></h2>
           <p>
             法的情報への導線を追加し、ホーム、プロフィール、
@@ -107,12 +124,73 @@
         </article>
 
         <article class="content-card">
-          <span class="status">正式リリース準備中</span>
+          <span class="status">開発履歴</span>
+          <h2><a href="v7-2-1.html">Version 7.2.1</a></h2>
+          <p>
+            テーマのプレビューと適用色を揃え、プロフィール画面の表示順と
+            実績バッジ画像の切り抜きを修正しました。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-2-1.html">変更内容を見る</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">開発履歴</span>
+          <h2><a href="v7-2-0.html">Version 7.2.0</a></h2>
+          <p>
+            実績の進捗管理、プロフィールバッジ、セッション詳細の編集機能を
+            追加した大型アップデートです。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-2-0.html">変更内容を見る</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">開発履歴</span>
+          <h2><a href="v7-1-3.html">Version 7.1.3</a></h2>
+          <p>
+            削除したセッションの30日間保持・復元、全データ削除時の二重確認、
+            取扱説明書の画像対応を追加しました。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-1-3.html">変更内容を見る</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">開発履歴</span>
+          <h2><a href="v7-1-2.html">Version 7.1.2</a></h2>
+          <p>
+            過去セッションへの画像追加とセッション削除の不具合を修正し、
+            画像保存設定をセッション保存画面へ整理しました。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-1-2.html">変更内容を見る</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">開発履歴</span>
+          <h2><a href="v7-1-1.html">Version 7.1.1</a></h2>
+          <p>
+            記録画像の保存・圧縮・バックアップと、道具一覧の並び替えなど、
+            日常利用の操作性を改善しました。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-1-1.html">変更内容を見る</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">iOS公開予定</span>
           <h2><a href="v7-1-0.html">Version 7.1.0</a></h2>
           <p>
             記録・履歴・道具管理の操作性向上、テーマカラー拡張、
-            新しいアプリアイコンを含む正式リリース候補版です。
+            新しいアプリアイコンを含むiOS初回公開版です。
           </p>
+          <p class="platform-note">2026/7/23 9:10（日本時間）公開予定</p>
           <div class="button-row">
             <a class="button" href="v7-1-0.html">変更内容を見る</a>
             <a
@@ -121,6 +199,18 @@
               target="_blank"
               rel="noopener noreferrer"
             >公式X @MyKyudoNote</a>
+          </div>
+        </article>
+
+        <article class="content-card">
+          <span class="status">初期開発版</span>
+          <h2><a href="v7-0-0.html">Version 7.0.0</a></h2>
+          <p>
+            練習記録、履歴、統計、プロフィール、道具カルテ、
+            バックアップなど、現在のアプリの基礎を整えました。
+          </p>
+          <div class="button-row">
+            <a class="button" href="v7-0-0.html">変更内容を見る</a>
           </div>
         </article>
       </div>
