@@ -27,6 +27,8 @@ GitHub Pagesで公開する静的Webサイトです。
 │   └── README.md              # 追加手順
 ├── qa/screenshots/            # PC・スマートフォン表示確認
 ├── scripts/
+│   ├── check_site.py          # サイト全体の自動検査
+│   ├── generate_sitemap.py    # XMLサイトマップ生成・整合性確認
 │   └── generate_x_header.swift
 ├── robots.txt
 ├── manifest.webmanifest
@@ -121,11 +123,28 @@ xcrun swiftc -parse-as-library scripts/generate_x_header.swift \
 ## 自動確認
 
 ローカルリンク、画像、基本SEO、外部リンクの安全属性、コントラスト、
-GA4タグの設置・重複・旧Analyticsコードの残存を確認します。
+GA4タグの設置・重複・旧Analyticsコードの残存、XMLサイトマップを確認します。
 
 ```bash
 python3 scripts/check_site.py
 ```
+
+## XMLサイトマップの更新
+
+公開URL、元のHTMLファイル、`lastmod`、`priority`は
+`scripts/generate_sitemap.py`の`SITEMAP_ENTRIES`で一元管理します。
+ページを追加または更新した場合は、`lastmod`を実際の更新日（`YYYY-MM-DD`）へ変更し、
+現在の`priority`方針を維持したうえで次を実行します。
+
+```bash
+python3 scripts/generate_sitemap.py
+python3 scripts/generate_sitemap.py --check
+python3 scripts/check_site.py
+```
+
+生成される`sitemap.xml`はUTF-8、XML Sitemap Protocolの名前空間、
+`loc`・`lastmod`・`priority`の順序、2スペースインデントへ統一されます。
+`sitemap.xml`を直接編集せず、設定一覧から再生成してください。
 
 ## Google Analytics
 

@@ -10,6 +10,13 @@ import sys
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlparse
+from xml.etree import ElementTree as ET
+
+from generate_sitemap import (
+    SITEMAP_ENTRIES,
+    SITEMAP_NAMESPACE,
+    render_sitemap,
+)
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -359,7 +366,49 @@ def main() -> int:
     if f"Sitemap: {SITE_ORIGIN}/sitemap.xml" not in robots:
         errors.append("robots.txtのSitemapが不正")
 
-    sitemap = (ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    sitemap_path = ROOT / "sitemap.xml"
+    try:
+        sitemap = sitemap_path.read_bytes().decode("utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        errors.append(f"sitemap.xmlをUTF-8で読み込めない: {error}")
+        sitemap = ""
+    if sitemap and not sitemap.startswith(
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+    ):
+        errors.append("sitemap.xmlのXML宣言またはUTF-8指定が不正")
+    try:
+        expected_sitemap = render_sitemap()
+    except ValueError as error:
+        errors.append(f"サイトマップ設定が不正: {error}")
+        expected_sitemap = ""
+    if sitemap and expected_sitemap and sitemap != expected_sitemap:
+        errors.append("sitemap.xmlがgenerate_sitemap.pyの設定と一致しない")
+
+    if sitemap:
+        try:
+            sitemap_root = ET.fromstring(sitemap)
+        except ET.ParseError as error:
+            errors.append(f"sitemap.xmlのXMLが不正: {error}")
+        else:
+            namespace = f"{{{SITEMAP_NAMESPACE}}}"
+            if sitemap_root.tag != f"{namespace}urlset":
+                errors.append("sitemap.xmlのurlset名前空間が不正")
+            sitemap_urls = sitemap_root.findall(f"{namespace}url")
+            if len(sitemap_urls) != len(SITEMAP_ENTRIES):
+                errors.append("sitemap.xmlのURL件数が設定と一致しない")
+            for url in sitemap_urls:
+                child_names = [child.tag for child in url]
+                expected_names = [
+                    f"{namespace}loc",
+                    f"{namespace}lastmod",
+                    f"{namespace}priority",
+                ]
+                if child_names != expected_names:
+                    errors.append(
+                        "sitemap.xmlのurl要素はloc・lastmod・priorityの順で指定する"
+                    )
+                    break
+
     if LEGACY_ORIGIN in sitemap or f"<loc>{SITE_ORIGIN}/</loc>" not in sitemap:
         errors.append("sitemap.xmlのURLが独自ドメインへ統一されていない")
 
