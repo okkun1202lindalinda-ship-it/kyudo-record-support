@@ -16,6 +16,10 @@ ROOT = Path(__file__).resolve().parent.parent
 HTML_FILES = sorted(ROOT.glob("*.html")) + sorted((ROOT / "releases").glob("*.html"))
 SITE_ORIGIN = "https://kyudojapan.net"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
+ANALYTICS_SCRIPT = ROOT / "assets/js/analytics.js"
+GA_MEASUREMENT_ID_PATTERN = re.compile(
+    r'const\s+measurementId\s*=\s*"(?P<id>G-[A-Z0-9]+)"\s*;'
+)
 SKIP_SCHEMES = {"http", "https", "mailto", "tel", "data"}
 CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
@@ -53,6 +57,8 @@ class PageParser(HTMLParser):
         self.has_favicon = False
         self.has_apple_touch_icon = False
         self.x_links = 0
+        self.head_depth = 0
+        self.scripts: list[tuple[str, bool, bool]] = []
 
     def handle_starttag(
         self,
@@ -60,6 +66,9 @@ class PageParser(HTMLParser):
         attrs: list[tuple[str, str | None]],
     ) -> None:
         values = dict(attrs)
+
+        if tag == "head":
+            self.head_depth += 1
 
         if element_id := values.get("id"):
             self.ids.append(element_id)
@@ -116,6 +125,15 @@ class PageParser(HTMLParser):
                         f'target="_blank"にnoopener noreferrerがない: {href}'
                     )
 
+        if tag == "script":
+            self.scripts.append(
+                (
+                    values.get("src") or "",
+                    "async" in values,
+                    self.head_depth > 0,
+                )
+            )
+
         for attr in ("href", "src"):
             if reference := values.get(attr):
                 self.local_references.append((attr, reference))
@@ -123,6 +141,8 @@ class PageParser(HTMLParser):
     def handle_endtag(self, tag: str) -> None:
         if tag == "title" and self.title_depth:
             self.title_depth -= 1
+        if tag == "head" and self.head_depth:
+            self.head_depth -= 1
 
     def handle_data(self, data: str) -> None:
         if self.title_depth:
@@ -131,7 +151,8 @@ class PageParser(HTMLParser):
 
 def validate_page(path: Path) -> list[str]:
     parser = PageParser()
-    parser.feed(path.read_text(encoding="utf-8"))
+    source = path.read_text(encoding="utf-8")
+    parser.feed(source)
     errors = list(parser.errors)
 
     if not "".join(parser.title_text).strip():
@@ -170,6 +191,37 @@ def validate_page(path: Path) -> list[str]:
         errors.append("faviconへのリンクがない")
     if not parser.has_apple_touch_icon:
         errors.append("apple-touch-iconへのリンクがない")
+
+    expected_analytics_src = (
+        "assets/js/analytics.js"
+        if path.parent == ROOT
+        else "../assets/js/analytics.js"
+    )
+    analytics_scripts = [
+        script for script in parser.scripts
+        if script[0].endswith("assets/js/analytics.js")
+    ]
+    if len(analytics_scripts) != 1:
+        errors.append(
+            f"GA4共通ローダーが1つではない: {len(analytics_scripts)}個"
+        )
+    else:
+        src, is_async, is_in_head = analytics_scripts[0]
+        if src != expected_analytics_src:
+            errors.append(f"GA4共通ローダーの相対パスが不正: {src}")
+        if not is_async:
+            errors.append("GA4共通ローダーにasync属性がない")
+        if not is_in_head:
+            errors.append("GA4共通ローダーがhead内にない")
+
+    direct_google_tags = [
+        src for src, _, _ in parser.scripts
+        if "googletagmanager.com/gtag/js" in src
+    ]
+    if direct_google_tags:
+        errors.append("GoogleタグをHTMLへ直接記述している")
+    if re.search(r"\bG-[A-Z0-9]+\b", source):
+        errors.append("Measurement IDをHTMLへ直接記述している")
 
     duplicate_ids = {item for item in parser.ids if parser.ids.count(item) > 1}
     if duplicate_ids:
@@ -237,6 +289,31 @@ def main() -> int:
     for page in HTML_FILES:
         errors.extend(validate_page(page))
 
+    if not ANALYTICS_SCRIPT.exists():
+        errors.append("GA4共通ローダーがない: assets/js/analytics.js")
+        analytics_source = ""
+    else:
+        analytics_source = ANALYTICS_SCRIPT.read_text(encoding="utf-8")
+    measurement_id_match = GA_MEASUREMENT_ID_PATTERN.search(analytics_source)
+    if measurement_id_match is None:
+        measurement_id = ""
+        errors.append("GA4共通ローダーにMeasurement ID設定がない")
+    else:
+        measurement_id = measurement_id_match.group("id")
+    if measurement_id and analytics_source.count(measurement_id) != 1:
+        errors.append("GA4共通ローダーのMeasurement IDが1つではない")
+    if analytics_source.count("https://www.googletagmanager.com/gtag/js") != 1:
+        errors.append("GA4共通ローダーのGoogleタグURLが1つではない")
+    if not re.search(r"\.async\s*=\s*true\b", analytics_source):
+        errors.append("Googleタグがasyncで読み込まれていない")
+    if 'window.gtag("config", measurementId)' not in analytics_source:
+        errors.append("GA4のconfig呼び出しがない")
+    if "__kyudoJapanGa4Initialized" not in analytics_source:
+        errors.append("GA4共通ローダーに重複初期化防止がない")
+    readme_source = (ROOT / "README.md").read_text(encoding="utf-8")
+    if measurement_id and f"Measurement ID：`{measurement_id}`" not in readme_source:
+        errors.append("READMEのMeasurement IDがGA4共通ローダーと一致しない")
+
     cname = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
     if cname != "kyudojapan.net":
         errors.append(f"CNAMEが不正: {cname}")
@@ -286,7 +363,15 @@ def main() -> int:
     if LEGACY_ORIGIN in sitemap or f"<loc>{SITE_ORIGIN}/</loc>" not in sitemap:
         errors.append("sitemap.xmlのURLが独自ドメインへ統一されていない")
 
-    text_extensions = {".html", ".md", ".xml", ".txt", ".yml", ".webmanifest"}
+    text_extensions = {
+        ".html", ".js", ".md", ".xml", ".txt", ".yml", ".webmanifest"
+    }
+    legacy_analytics_patterns = {
+        "Universal Analytics ID": r"\bUA-\d+-\d+\b",
+        "analytics.js": r"google-analytics\.com/analytics\.js",
+        "旧ga関数": r"\bga\s*\(\s*['\"]create['\"]",
+        "旧_gaq": r"\b_gaq\b",
+    }
     for source in ROOT.rglob("*"):
         if ".git" in source.parts or not source.is_file() or source.suffix not in text_extensions:
             continue
@@ -298,6 +383,12 @@ def main() -> int:
         )
         if LEGACY_ORIGIN in source_text and not documented_dns_target:
             errors.append(f"旧github.io URLが残っている: {source.relative_to(ROOT)}")
+        for label, pattern in legacy_analytics_patterns.items():
+            if re.search(pattern, source_text, flags=re.IGNORECASE):
+                errors.append(
+                    f"古いAnalyticsコード（{label}）が残っている: "
+                    f"{source.relative_to(ROOT)}"
+                )
 
     stylesheet = (ROOT / "assets/css/site.css").read_text(encoding="utf-8")
     if re.search(r"object-fit\s*:\s*fill\b", stylesheet):

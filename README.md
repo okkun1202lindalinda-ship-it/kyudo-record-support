@@ -17,6 +17,7 @@ GitHub Pagesで公開する静的Webサイトです。
 ├── privacy.html               # プライバシーポリシー
 ├── assets/
 │   ├── css/site.css           # 共通デザイン・レスポンシブ・ダークモード
+│   ├── js/analytics.js        # GA4共通ローダー・Measurement ID
 │   ├── js/site.js             # モバイルナビ・年表示
 │   ├── icons/                 # favicon・公式Xブランド素材
 │   ├── images/                # アプリ画面・OGP・Xヘッダー
@@ -119,11 +120,29 @@ xcrun swiftc -parse-as-library scripts/generate_x_header.swift \
 
 ## 自動確認
 
-ローカルリンク、画像、基本SEO、外部リンクの安全属性、コントラストを確認します。
+ローカルリンク、画像、基本SEO、外部リンクの安全属性、コントラスト、
+GA4タグの設置・重複・旧Analyticsコードの残存を確認します。
 
 ```bash
 python3 scripts/check_site.py
 ```
+
+## Google Analytics
+
+公式サイトにはGoogle Analytics 4（GA4）を導入しています。
+
+- Measurement ID：`G-K09RH58W5E`
+- 設定場所：`assets/js/analytics.js`の`measurementId`
+- 読み込み場所：全HTMLページの`<head>`内にある共通ローダー参照
+
+配信時に使うMeasurement IDは`assets/js/analytics.js`の1か所だけで管理します。
+IDを変更するときは、このファイルの`measurementId`だけを変更すれば全ページへ反映されます。
+READMEに記載したIDも、保守資料として実際の設定と一致するよう更新してください。
+
+新しいHTMLページを追加するときは、階層に合う相対パスで共通ローダーを
+`<head>`内へ1回だけ追加します。Google提供のタグやMeasurement IDを各ページへ
+直接貼り付けないでください。変更後は`python3 scripts/check_site.py`とLighthouseを実行し、
+プライバシーポリシーの説明が実際の計測内容と一致することも確認します。
 
 ## v7.1のプライバシー実装
 
@@ -131,7 +150,9 @@ python3 scripts/check_site.py
 - 写真は利用者が写真ライブラリから選択したものだけを使用する
 - 写真から読み取るメタデータは撮影日時だけで、位置情報は利用しない
 - 現行v7.0はカメラ起動機能と位置情報機能を使用しない
-- アカウント、広告、解析SDK、クラッシュ解析SDK、開発者サーバー送信はない
+- Flutterアプリ本体には、アカウント、広告、解析SDK、クラッシュ解析SDK、
+  開発者サーバー送信はない
+- 公式サイトのGA4アクセス解析はアプリ本体と分離している
 - CSV・ZIPの書き出しと共有は利用者が操作した場合だけ実行する
 
 将来、Firebase、広告、クラウド同期、ユーザー登録、クラッシュ解析などを
