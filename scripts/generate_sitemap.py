@@ -30,8 +30,14 @@ class SitemapEntry:
 SITEMAP_ENTRIES = (
     SitemapEntry("index.html", "/", "2026-07-22", "1.0"),
     SitemapEntry("support.html", "/support.html", "2026-07-22", "0.8"),
-    SitemapEntry("privacy.html", "/privacy.html", "2026-07-22", "0.8"),
+    SitemapEntry("privacy/index.html", "/privacy", "2026-07-22", "0.8"),
     SitemapEntry("releases/index.html", "/releases/", "2026-07-22", "0.6"),
+    SitemapEntry(
+        "releases/v7-2-2.html",
+        "/releases/v7-2-2.html",
+        "2026-07-22",
+        "0.7",
+    ),
     SitemapEntry(
         "releases/v7-1-0.html",
         "/releases/v7-1-0.html",

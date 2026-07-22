@@ -14,7 +14,8 @@ GitHub Pagesで公開する静的Webサイトです。
 ├── index.html                 # 公式ポータル
 ├── 404.html                   # 独自404ページ
 ├── support.html               # 使い方・FAQ・問い合わせ・公式X
-├── privacy.html               # プライバシーポリシー
+├── privacy.html               # 旧URL互換用プライバシーポリシー
+├── privacy/index.html         # 公開URL /privacy のプライバシーポリシー
 ├── assets/
 │   ├── css/site.css           # 共通デザイン・レスポンシブ・ダークモード
 │   ├── js/analytics.js        # GA4共通ローダー・Measurement ID
@@ -37,7 +38,7 @@ GitHub Pagesで公開する静的Webサイトです。
 
 ## 公開前確認
 
-- `index.html`、`support.html`、`privacy.html`、`releases/`が表示できる
+- `index.html`、`support.html`、`privacy/`、`releases/`が表示できる
 - PC、スマートフォン、タブレット幅で文字切れ・横スクロールがない
 - キーボード操作でナビゲーション、公式X、サポートへ移動できる
 - `prefers-color-scheme: dark`で文字と背景のコントラストを維持する
@@ -163,7 +164,10 @@ READMEに記載したIDも、保守資料として実際の設定と一致する
 直接貼り付けないでください。変更後は`python3 scripts/check_site.py`とLighthouseを実行し、
 プライバシーポリシーの説明が実際の計測内容と一致することも確認します。
 
-## v7.1のプライバシー実装
+## v7.2.2のプライバシー実装
+
+アプリ内の法的情報から `https://kyudojapan.net/privacy` を開きます。
+旧 `privacy.html` は互換用として残し、canonicalは `/privacy` へ統一します。
 
 - 練習記録、プロフィール、道具、ノート、設定、画像は端末内へ保存する
 - 写真は利用者が写真ライブラリから選択したものだけを使用する

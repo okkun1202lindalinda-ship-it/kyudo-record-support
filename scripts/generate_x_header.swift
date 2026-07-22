@@ -188,6 +188,47 @@ private enum HeaderGenerator {
       options: [.usesLineFragmentOrigin, .usesFontLeading]
     )
 
+    let brand = NSAttributedString(
+      string: "Kyudo JAPAN",
+      attributes: [
+        .font: NSFont.systemFont(ofSize: 19, weight: .semibold),
+        .foregroundColor: NSColor(
+          calibratedRed: 49 / 255,
+          green: 81 / 255,
+          blue: 127 / 255,
+          alpha: 1
+        ),
+        .kern: 1.2,
+      ]
+    )
+    brand.draw(
+      with: NSRect(
+        x: titleRect.minX + 2,
+        y: min(size.height - 34, titleRect.maxY + 30),
+        width: titleRect.width,
+        height: 28
+      ),
+      options: [.usesLineFragmentOrigin, .usesFontLeading]
+    )
+
+    let website = NSAttributedString(
+      string: "kyudojapan.net",
+      attributes: [
+        .font: NSFont.systemFont(ofSize: 17, weight: .medium),
+        .foregroundColor: NSColor(calibratedWhite: 0.32, alpha: 1),
+        .kern: 0.4,
+      ]
+    )
+    website.draw(
+      with: NSRect(
+        x: subtitleRect.minX,
+        y: max(24, subtitleRect.minY - 40),
+        width: subtitleRect.width,
+        height: 28
+      ),
+      options: [.usesLineFragmentOrigin, .usesFontLeading]
+    )
+
     return canvas
   }
 

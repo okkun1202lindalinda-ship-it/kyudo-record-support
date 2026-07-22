@@ -20,7 +20,11 @@ from generate_sitemap import (
 
 
 ROOT = Path(__file__).resolve().parent.parent
-HTML_FILES = sorted(ROOT.glob("*.html")) + sorted((ROOT / "releases").glob("*.html"))
+HTML_FILES = (
+    sorted(ROOT.glob("*.html"))
+    + sorted((ROOT / "privacy").glob("*.html"))
+    + sorted((ROOT / "releases").glob("*.html"))
+)
 SITE_ORIGIN = "https://kyudojapan.net"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 ANALYTICS_SCRIPT = ROOT / "assets/js/analytics.js"
@@ -173,10 +177,12 @@ def validate_page(path: Path) -> list[str]:
     canonical_paths = {
         "index.html": "/",
         "support.html": "/support.html",
-        "privacy.html": "/privacy.html",
+        "privacy.html": "/privacy",
+        "privacy/index.html": "/privacy",
         "404.html": "/404.html",
         "releases/index.html": "/releases/",
         "releases/v7-1-0.html": "/releases/v7-1-0.html",
+        "releases/v7-2-2.html": "/releases/v7-2-2.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
