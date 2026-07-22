@@ -36,8 +36,10 @@ CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
     "補助文（Light）": ("#5d6879", "#f5f7fa"),
     "主要ボタン": ("#ffffff", "#46689b"),
+    "Roadmapラベル（Light）": ("#315b8f", "#dfe9f8"),
     "本文（Dark）": ("#f4f7fb", "#0f1622"),
     "補助文（Dark）": ("#b6c1cf", "#0f1622"),
+    "Roadmapラベル（Dark）": ("#b4cef2", "#243b5c"),
 }
 PNG_ASSETS = {
     "assets/icons/app-icon-source.png": (1024, 1024),

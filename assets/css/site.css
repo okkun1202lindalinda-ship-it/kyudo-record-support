@@ -352,7 +352,7 @@ main {
   font-size: 18px;
 }
 
-.section-dark .section-heading p {
+.section-dark .section-heading p:not(.eyebrow) {
   color: #c6d0dd;
 }
 
