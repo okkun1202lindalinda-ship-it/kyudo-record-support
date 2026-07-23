@@ -33,6 +33,12 @@ SITEMAP_ENTRIES = (
     SitemapEntry("privacy/index.html", "/privacy", "2026-07-22", "0.8"),
     SitemapEntry("releases/index.html", "/releases/", "2026-07-23", "0.6"),
     SitemapEntry(
+        "releases/v7-2-5.html",
+        "/releases/v7-2-5.html",
+        "2026-07-23",
+        "0.6",
+    ),
+    SitemapEntry(
         "releases/v7-2-4.html",
         "/releases/v7-2-4.html",
         "2026-07-23",
