@@ -28,9 +28,11 @@ GitHub Pagesで公開する静的Webサイトです。
 │   └── README.md              # 追加手順
 ├── qa/screenshots/            # PC・スマートフォン表示確認
 ├── scripts/
+│   ├── build_site.py          # GitHub Pages公開物の生成・検証
 │   ├── check_site.py          # サイト全体の自動検査
 │   ├── generate_sitemap.py    # XMLサイトマップ生成・整合性確認
 │   └── generate_x_header.swift
+├── _site/                     # 公開用生成物（Git管理対象外）
 ├── robots.txt
 ├── manifest.webmanifest
 └── sitemap.xml
@@ -67,9 +69,20 @@ HTTPS証明書の発行には追加で時間がかかる場合があります。
 
 ## GitHub Actions
 
-`.github/workflows/pages.yml`は、push時に`python3 scripts/check_site.py`を実行し、
-成功した静的ファイルだけをGitHub Pagesへ配布します。利用開始時にRepository Settingsの
-Pages / Build and deployment / Sourceを`GitHub Actions`へ変更します。
+`.github/workflows/pages.yml`は、push時にサイト検査とサイトマップ検査を実行し、
+`scripts/build_site.py`が生成した`_site/`だけをGitHub Pagesへ配布します。
+`docs/`、`outputs/`、`qa/`、`scripts/`、`.github/`などの内部資料・保守用ファイルは
+公式ドメインから配信しません。利用開始時にRepository SettingsのPagesで
+Build and deployment / Sourceを`GitHub Actions`へ変更します。
+
+公開ファイルや公開ディレクトリを追加するときは、
+`scripts/build_site.py`の`PUBLIC_FILES`または`PUBLIC_DIRECTORIES`へ追加します。
+公開ディレクトリ内の保守資料は`EXCLUDED_PATHS`へ追加し、次の手順で公開物を確認します。
+
+```bash
+python3 scripts/build_site.py
+python3 scripts/build_site.py --check
+```
 
 ## App Store・Google Playリンクの追加
 
@@ -128,6 +141,9 @@ GA4タグの設置・重複・旧Analyticsコードの残存、XMLサイトマ�
 
 ```bash
 python3 scripts/check_site.py
+python3 scripts/generate_sitemap.py --check
+python3 scripts/build_site.py
+python3 scripts/build_site.py --check
 ```
 
 ## XMLサイトマップの更新
