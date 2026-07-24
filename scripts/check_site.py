@@ -27,6 +27,8 @@ HTML_FILES = (
 )
 SITE_ORIGIN = "https://kyudojapan.net"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
+SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
+LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
 ANALYTICS_SCRIPT = ROOT / "assets/js/analytics.js"
 GA_MEASUREMENT_ID_PATTERN = re.compile(
     r'const\s+measurementId\s*=\s*"(?P<id>G-[A-Z0-9]+)"\s*;'
@@ -176,6 +178,15 @@ def validate_page(path: Path) -> list[str]:
         errors.append("canonicalがない")
 
     relative = path.relative_to(ROOT).as_posix()
+    if LEGACY_SUPPORT_EMAIL in source:
+        errors.append("旧サポートメールアドレスが残っている")
+    if relative in {"support.html", "privacy.html", "privacy/index.html"}:
+        expected_mailto = f'mailto:{SUPPORT_EMAIL}'
+        if expected_mailto not in source:
+            errors.append(f"新サポートメールへのリンクがない: {expected_mailto}")
+        if SUPPORT_EMAIL not in source:
+            errors.append(f"新サポートメールアドレスの表示がない: {SUPPORT_EMAIL}")
+
     canonical_paths = {
         "index.html": "/",
         "support.html": "/support.html",
