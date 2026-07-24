@@ -99,7 +99,7 @@
   <header class="site-header">
     <div class="container nav-shell">
       <a class="brand" href="index.html" aria-label="自分だけの弓道ノート 公式サイト">
-        <img src="assets/icons/icon-192.png?v=7.2.2" alt="" width="42" height="42">
+        <img src="assets/icons/icon-96.png?v=7.2.2" alt="" width="42" height="42">
         <span>自分だけの弓道ノート</span>
       </a>
       <button
@@ -148,28 +148,52 @@
 
         <div class="app-showcase" aria-label="アプリのホーム、記録、統計画面">
           <figure class="phone-shot phone-shot-record">
-            <img
-              src="assets/images/app-record.jpg?v=20260722"
-              alt="一射ごとの着弾位置を記録する画面"
-              width="720"
-              height="1564"
-            >
+            <picture>
+              <source
+                type="image/webp"
+                srcset="assets/images/app-record-360.webp 360w, assets/images/app-record-480.webp 480w, assets/images/app-record-720.webp 720w"
+                sizes="(max-width: 560px) 42vw, (max-width: 720px) 43vw, (max-width: 980px) 27vw, 235px"
+              >
+              <img
+                src="assets/images/app-record.jpg?v=20260722"
+                alt="一射ごとの着弾位置を記録する画面"
+                width="720"
+                height="1564"
+                decoding="async"
+              >
+            </picture>
           </figure>
           <figure class="phone-shot phone-shot-statistics">
-            <img
-              src="assets/images/app-statistics.jpg?v=20260722"
-              alt="射数、的中率、散布図を確認する統計画面"
-              width="720"
-              height="1564"
-            >
+            <picture>
+              <source
+                type="image/webp"
+                srcset="assets/images/app-statistics-360.webp 360w, assets/images/app-statistics-480.webp 480w, assets/images/app-statistics-720.webp 720w"
+                sizes="(max-width: 560px) 42vw, (max-width: 720px) 43vw, (max-width: 980px) 27vw, 235px"
+              >
+              <img
+                src="assets/images/app-statistics.jpg?v=20260722"
+                alt="射数、的中率、散布図を確認する統計画面"
+                width="720"
+                height="1564"
+                decoding="async"
+              >
+            </picture>
           </figure>
           <figure class="phone-shot phone-shot-home">
-            <img
-              src="assets/images/app-home.jpg?v=20260722"
-              alt="記録、履歴、統計へ移動できるホーム画面"
-              width="720"
-              height="1564"
-            >
+            <picture>
+              <source
+                type="image/webp"
+                srcset="assets/images/app-home-360.webp 360w, assets/images/app-home-480.webp 480w, assets/images/app-home-720.webp 720w"
+                sizes="(max-width: 560px) 42vw, (max-width: 720px) 43vw, (max-width: 980px) 27vw, 235px"
+              >
+              <img
+                src="assets/images/app-home.jpg?v=20260722"
+                alt="記録、履歴、統計へ移動できるホーム画面"
+                width="720"
+                height="1564"
+                decoding="async"
+              >
+            </picture>
           </figure>
         </div>
       </div>
@@ -262,7 +286,14 @@
       <div class="container">
         <div class="x-card">
           <span class="x-logo" aria-hidden="true">
-            <img src="assets/icons/x-logo-white.png" alt="" width="34" height="35">
+            <img
+              src="assets/icons/x-logo-white-68.png"
+              alt=""
+              width="34"
+              height="35"
+              loading="lazy"
+              decoding="async"
+            >
           </span>
           <div class="x-copy">
             <h2 id="x-title">公式X</h2>
@@ -366,7 +397,9 @@
           src="assets/images/app-backup.jpg?v=20260720"
           alt="バックアップを作成、復元する設定画面"
           width="720"
+          height="1564"
           loading="lazy"
+          decoding="async"
         >
       </div>
     </section>

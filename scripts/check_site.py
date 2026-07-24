@@ -47,9 +47,14 @@ PNG_ASSETS = {
     "assets/icons/app-icon-source.png": (1024, 1024),
     "assets/icons/apple-touch-icon.png": (180, 180),
     "assets/icons/favicon-32.png": (32, 32),
+    "assets/icons/icon-96.png": (96, 96),
     "assets/icons/icon-192.png": (192, 192),
     "assets/icons/icon-512.png": (512, 512),
     "assets/social/x-profile-icon-800x800.png": (800, 800),
+}
+ALPHA_PNG_ASSETS = {
+    "assets/icons/x-logo-black-68.png": (68, 70),
+    "assets/icons/x-logo-white-68.png": (68, 70),
 }
 
 
@@ -121,9 +126,11 @@ class PageParser(HTMLParser):
             if "alt" not in values:
                 self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
             classes = set((values.get("class") or "").split())
-            if "support-screenshot" in classes and "height" in values:
+            if "support-screenshot" in classes and (
+                values.get("width"), values.get("height")
+            ) != ("720", "1564"):
                 self.errors.append(
-                    "support-screenshotへ固定height属性を指定している"
+                    "support-screenshotのwidth・height属性が不正"
                 )
 
         if "style" in values:
@@ -152,6 +159,11 @@ class PageParser(HTMLParser):
         for attr in ("href", "src"):
             if reference := values.get(attr):
                 self.local_references.append((attr, reference))
+
+        if srcset := values.get("srcset"):
+            for candidate in srcset.split(","):
+                reference = candidate.strip().split()[0]
+                self.local_references.append(("srcset", reference))
 
     def handle_endtag(self, tag: str) -> None:
         if tag == "title" and self.title_depth:
@@ -303,7 +315,12 @@ def contrast_ratio(foreground: str, background: str) -> float:
     return (lighter + 0.05) / (darker + 0.05)
 
 
-def validate_png(path: Path, expected_size: tuple[int, int]) -> list[str]:
+def validate_png(
+    path: Path,
+    expected_size: tuple[int, int],
+    *,
+    allow_alpha: bool = False,
+) -> list[str]:
     data = path.read_bytes()
     if not data.startswith(b"\x89PNG\r\n\x1a\n") or len(data) < 26:
         return [f"{path.relative_to(ROOT)}: PNG形式ではない"]
@@ -314,7 +331,7 @@ def validate_png(path: Path, expected_size: tuple[int, int]) -> list[str]:
             f"{path.relative_to(ROOT)}: "
             f"{width}x{height}（期待値 {expected_size[0]}x{expected_size[1]}）"
         )
-    if data[25] in {4, 6}:
+    if not allow_alpha and data[25] in {4, 6}:
         errors.append(f"{path.relative_to(ROOT)}: アルファチャンネルが残っている")
     return errors
 
@@ -499,6 +516,13 @@ def main() -> int:
             errors.append(f"必須アセットがない: {relative_path}")
         else:
             errors.extend(validate_png(asset, expected_size))
+
+    for relative_path, expected_size in ALPHA_PNG_ASSETS.items():
+        asset = ROOT / relative_path
+        if not asset.exists():
+            errors.append(f"必須アセットがない: {relative_path}")
+        else:
+            errors.extend(validate_png(asset, expected_size, allow_alpha=True))
 
     contrast_results = {
         name: contrast_ratio(foreground, background)

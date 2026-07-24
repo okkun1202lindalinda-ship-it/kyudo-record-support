@@ -282,6 +282,10 @@ main {
   box-shadow: 0 30px 60px rgba(25, 38, 57, 0.24);
 }
 
+.phone-shot picture {
+  display: block;
+}
+
 .phone-shot img {
   width: 100%;
   height: auto;
