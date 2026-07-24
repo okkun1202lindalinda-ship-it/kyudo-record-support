@@ -217,6 +217,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-2-3.html": "/releases/v7-2-3.html",
         "releases/v7-2-4.html": "/releases/v7-2-4.html",
         "releases/v7-2-5.html": "/releases/v7-2-5.html",
+        "releases/v7-2-6.html": "/releases/v7-2-6.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:

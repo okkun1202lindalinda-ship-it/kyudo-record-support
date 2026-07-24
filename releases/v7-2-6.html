@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <script src="../assets/js/analytics.js" async></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#46689b">
+  <title>Version 7.2.6｜自分だけの弓道ノート</title>
+  <meta name="description" content="自分だけの弓道ノート Version 7.2.6の更新内容です。">
+  <link rel="canonical" href="https://kyudojapan.net/releases/v7-2-6.html">
+  <meta property="og:type" content="article">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:site_name" content="Kyudo JAPAN">
+  <meta property="og:title" content="Version 7.2.6｜自分だけの弓道ノート">
+  <meta property="og:description" content="射ごとの矢と射形画像を記録し、射形を一覧・比較できるようになりました。">
+  <meta property="og:url" content="https://kyudojapan.net/releases/v7-2-6.html">
+  <meta property="og:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@MyKyudoNote">
+  <meta name="twitter:url" content="https://kyudojapan.net/releases/v7-2-6.html">
+  <meta name="twitter:title" content="Version 7.2.6｜自分だけの弓道ノート">
+  <meta name="twitter:description" content="射ごとの矢と射形画像を記録し、射形を一覧・比較できるようになりました。">
+  <meta name="twitter:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=7.2.6">
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png?v=7.2.6">
+  <link rel="stylesheet" href="../assets/css/site.css">
+  <script src="../assets/js/site.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">本文へ移動</a>
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="brand" href="../index.html" aria-label="自分だけの弓道ノート 公式サイト">
+        <img src="../assets/icons/icon-192.png?v=7.2.6" alt="" width="42" height="42">
+        <span>自分だけの弓道ノート</span>
+      </a>
+      <button class="nav-toggle" type="button" aria-label="メニューを開く" aria-expanded="false" aria-controls="site-navigation" data-nav-toggle>☰</button>
+      <nav class="site-nav" id="site-navigation" aria-label="メインナビゲーション" data-site-nav>
+        <a href="../index.html">ホーム</a>
+        <a href="../index.html#features">機能</a>
+        <a href="../index.html#download">ダウンロード</a>
+        <a href="./" aria-current="page">リリースノート</a>
+        <a href="../support.html">サポート</a>
+        <a href="../privacy/">プライバシー</a>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content">
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">Release Notes · Build 17</p>
+        <h1>Version 7.2.6</h1>
+        <p>射ごとの道具と射形を、より詳しく振り返れるようになりました。</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container narrow content-stack">
+        <article class="content-card">
+          <span class="status">最新リリース候補</span>
+          <p class="platform-note">iOS・Androidともに公開日は未定です。</p>
+          <h2>主な更新内容</h2>
+          <ul>
+            <li>射ごとに使用した矢セットと個別の矢番号を記録できるようになりました</li>
+            <li>射ごとに射形画像を保存し、一覧・2枚比較できる「射形管理」を追加しました</li>
+            <li>射形管理と射詳細の気づきメモを同じデータとして編集できるようにしました</li>
+            <li>セッション保存画面で、登録済みの弓道場と道具を一覧から選びやすくしました</li>
+            <li>道具カルテと履歴・統計・セッション画面のデータ同期を改善しました</li>
+            <li>比較画面で、セッション回数ではなく立の合計を表示するよう修正しました</li>
+            <li>矢セット本数を減らす際の確認と、編集・削除後の画面位置保持を追加しました</li>
+            <li>承認済みの矢アイコンを小さい表示でも見やすいデザインへ更新しました</li>
+          </ul>
+        </article>
+        <article class="content-card">
+          <h2>データの互換性</h2>
+          <p>
+            DB Schema 15へ安全に移行します。従来の射には新しい情報を強制せず、
+            セッションの既定矢をそのまま利用できます。旧バックアップ、
+            保存画像、道具・プロフィール・統計・実績データとの互換性を維持しています。
+          </p>
+        </article>
+        <div class="button-row">
+          <a class="button" href="./">リリース一覧へ戻る</a>
+          <a class="button button-secondary" href="../support.html">サポートを見る</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><h2>自分だけの弓道ノート</h2><p>自分の弓道史を共に歩むツール。</p></div>
+      <div><h3>公式情報</h3><ul><li><a href="./">リリースノート</a></li><li><a href="https://x.com/MyKyudoNote" target="_blank" rel="noopener noreferrer">公式X @MyKyudoNote</a></li></ul></div>
+      <div><h3>サポート</h3><ul><li><a href="../support.html">サポート・FAQ</a></li><li><a href="../privacy/">プライバシーポリシー</a></li></ul></div>
+    </div>
+    <div class="container footer-bottom"><p>© 2026 Kyudo JAPAN</p></div>
+  </footer>
+</body>
+</html>
