@@ -84,16 +84,19 @@ python3 scripts/build_site.py
 python3 scripts/build_site.py --check
 ```
 
-## App Store・Google Playリンクの追加
+## App Store・Google Playの公開状況
 
-`index.html` の `#download` 内にある準備中の `span.store-button` を
-`a.store-button` へ変更し、各ストアの公開URLを `href` に設定します。
+iOS版はApp Storeで公開中です。
 
-例：
+App Store URL：
+`https://apps.apple.com/jp/app/%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/id6790650199`
 
-```html
-<a class="store-button" href="APP_STORE_URL">App Storeで入手</a>
-```
+Android版はGoogle Play未公開です。ストアへの導線は`index.html`と
+`releases/index.html`で管理します。利用者向けページではBuild番号を原則として
+表示せず、確認できていないVersion番号をBuild番号から推測して掲載しません。
+
+ストア公開状況が変わった場合は、トップページ、リリースノート、
+JSON-LDの構造化データ、`scripts/generate_sitemap.py`の更新日を同時に更新します。
 
 ## News・DLC・Subscriptionの追加
 

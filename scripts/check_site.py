@@ -26,6 +26,12 @@ HTML_FILES = (
     + sorted((ROOT / "releases").glob("*.html"))
 )
 SITE_ORIGIN = "https://kyudojapan.net"
+APP_STORE_URL = (
+    "https://apps.apple.com/jp/app/"
+    "%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE"
+    "%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/"
+    "id6790650199"
+)
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -38,6 +44,7 @@ CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
     "補助文（Light）": ("#5d6879", "#f5f7fa"),
     "主要ボタン": ("#ffffff", "#46689b"),
+    "App Storeボタン（Dark）": ("#ffffff", "#315b8f"),
     "Roadmapラベル（Light）": ("#315b8f", "#dfe9f8"),
     "本文（Dark）": ("#f4f7fb", "#0f1622"),
     "補助文（Dark）": ("#b6c1cf", "#0f1622"),
@@ -77,6 +84,7 @@ class PageParser(HTMLParser):
         self.has_favicon = False
         self.has_apple_touch_icon = False
         self.x_links = 0
+        self.app_store_links = 0
         self.head_depth = 0
         self.scripts: list[tuple[str, bool, bool]] = []
 
@@ -140,6 +148,8 @@ class PageParser(HTMLParser):
             href = values.get("href", "")
             if href == "https://x.com/MyKyudoNote":
                 self.x_links += 1
+            if href == APP_STORE_URL:
+                self.app_store_links += 1
             if values.get("target") == "_blank":
                 rel = set((values.get("rel") or "").split())
                 if not {"noopener", "noreferrer"}.issubset(rel):
@@ -292,6 +302,22 @@ def validate_page(path: Path) -> list[str]:
 
     if path.name in {"index.html", "support.html"} and parser.x_links == 0:
         errors.append("公式Xリンクがない")
+    if relative in {"index.html", "releases/index.html"} and parser.app_store_links == 0:
+        errors.append("公開中のApp Storeリンクがない")
+
+    stale_public_copy = {
+        "初回公開前": "公開前の案内が残っている",
+        "現行公開版なし": "iOS公開前の案内が残っている",
+        "公開予定：未定": "公開予定の古い案内が残っている",
+        "最新リリース候補 Version 7.2.6": (
+            "未公開版を現行版と誤認させる案内が残っている"
+        ),
+        "Build 16": "利用者向けHTMLに内部Build番号が残っている",
+        "Build 17": "利用者向けHTMLに内部Build番号が残っている",
+    }
+    for stale_text, message in stale_public_copy.items():
+        if stale_text in source:
+            errors.append(f"{message}: {stale_text}")
 
     return [f"{path.relative_to(ROOT)}: {error}" for error in errors]
 
@@ -403,8 +429,12 @@ def main() -> int:
                 errors.append("JSON-LDにOrganizationがない")
             if '"@type": "WebSite"' not in serialized:
                 errors.append("JSON-LDにWebSiteがない")
+            if '"@type": "SoftwareApplication"' not in serialized:
+                errors.append("JSON-LDにSoftwareApplicationがない")
             if f'"url": "{SITE_ORIGIN}/"' not in serialized:
                 errors.append("JSON-LDのURLが独自ドメインではない")
+            if f'"downloadUrl": "{APP_STORE_URL}"' not in serialized:
+                errors.append("JSON-LDのApp Store URLが不正")
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     if "Host: kyudojapan.net" not in robots:

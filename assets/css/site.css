@@ -490,6 +490,29 @@ main {
   font-size: 16px;
 }
 
+a.store-button {
+  text-decoration: none;
+}
+
+.store-button-live {
+  border-style: solid;
+  border-color: var(--color-brand);
+  color: #ffffff;
+  background: var(--color-brand);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+}
+
+.store-button-live strong,
+.store-button-live small {
+  color: inherit;
+}
+
+.store-button-live:hover {
+  color: #ffffff;
+  background: var(--color-brand-strong);
+}
+
 .platform-version {
   margin: 0 0 6px;
   color: var(--color-text) !important;
@@ -763,6 +786,15 @@ main {
 
   .section-dark {
     background: #090e16;
+  }
+
+  .store-button-live {
+    border-color: #86a8d7;
+    background: #315b8f;
+  }
+
+  .store-button-live:hover {
+    background: #264b78;
   }
 }
 
