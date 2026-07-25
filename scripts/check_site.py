@@ -36,6 +36,7 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
+CURRENT_IOS_VERSION = "7.2.5"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -311,10 +312,15 @@ def validate_page(path: Path) -> list[str]:
         errors.append("公式Xリンクがない")
     if relative in {"index.html", "releases/index.html"} and parser.app_store_links == 0:
         errors.append("公開中のApp Storeリンクがない")
-    if relative in {"index.html", "releases/index.html"}:
-        if parser.app_store_badges != 1:
+    expected_app_store_badges = {
+        "index.html": 2,
+        "releases/index.html": 1,
+    }
+    if relative in expected_app_store_badges:
+        expected_badge_count = expected_app_store_badges[relative]
+        if parser.app_store_badges != expected_badge_count:
             errors.append(
-                f"Apple公式App Storeバッジが1点ではない: "
+                f"Apple公式App Storeバッジが{expected_badge_count}点ではない: "
                 f"{parser.app_store_badges}点"
             )
         trademark_notice = (
@@ -322,6 +328,16 @@ def validate_page(path: Path) -> list[str]:
         )
         if trademark_notice not in source:
             errors.append("Appleの商標クレジットがない")
+
+    if relative == "releases/index.html":
+        if f"現行公開版：Version {CURRENT_IOS_VERSION}" not in source:
+            errors.append("iOSの現行公開Versionが明記されていない")
+        if "現行公開版：なし" not in source:
+            errors.append("Androidに現行公開版がないことが明記されていない")
+
+    if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
+        if "iOS現行公開版" not in source:
+            errors.append("現行iOS版のリリース状態が明記されていない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",

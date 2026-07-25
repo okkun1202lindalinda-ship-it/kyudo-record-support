@@ -510,17 +510,12 @@ main {
   font-size: 16px;
 }
 
-a.store-button {
-  text-decoration: none;
-}
-
 .store-button-live {
   border-style: solid;
   border-color: var(--color-brand);
   color: #ffffff;
   background: var(--color-brand);
   box-shadow: var(--shadow-soft);
-  cursor: pointer;
 }
 
 .store-button-live strong,
@@ -528,9 +523,8 @@ a.store-button {
   color: inherit;
 }
 
-.store-button-live:hover {
-  color: #ffffff;
-  background: var(--color-brand-strong);
+.store-button-live .app-store-badge-link {
+  margin-top: 4px;
 }
 
 .platform-version {
@@ -820,10 +814,6 @@ a.store-button {
   .store-button-live {
     border-color: #86a8d7;
     background: #315b8f;
-  }
-
-  .store-button-live:hover {
-    background: #264b78;
   }
 }
 

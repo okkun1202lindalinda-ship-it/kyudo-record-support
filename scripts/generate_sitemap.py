@@ -41,7 +41,7 @@ SITEMAP_ENTRIES = (
     SitemapEntry(
         "releases/v7-2-5.html",
         "/releases/v7-2-5.html",
-        "2026-07-23",
+        "2026-07-25",
         "0.6",
     ),
     SitemapEntry(
