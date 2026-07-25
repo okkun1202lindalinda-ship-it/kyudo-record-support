@@ -330,14 +330,14 @@ def validate_page(path: Path) -> list[str]:
             errors.append("Appleの商標クレジットがない")
 
     if relative == "releases/index.html":
-        if f"現行公開版：Version {CURRENT_IOS_VERSION}" not in source:
-            errors.append("iOSの現行公開Versionが明記されていない")
-        if "現行公開版：なし" not in source:
-            errors.append("Androidに現行公開版がないことが明記されていない")
+        if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
+            errors.append("iOSの現行バージョンが明記されていない")
+        if "現行バージョン：なし" not in source:
+            errors.append("Androidに現行バージョンがないことが明記されていない")
 
     if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
-        if "iOS現行公開版" not in source:
-            errors.append("現行iOS版のリリース状態が明記されていない")
+        if "App Store配信中" not in source:
+            errors.append("現行iOS版がApp Store配信中と明記されていない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",
