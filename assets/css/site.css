@@ -228,8 +228,28 @@ main {
 .hero-actions,
 .button-row {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.app-store-badge-link {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 68px;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--shadow-soft);
+}
+
+.app-store-badge {
+  width: auto;
+  height: 54px;
+  max-width: 100%;
+  object-fit: contain;
 }
 
 .button {
@@ -758,6 +778,15 @@ a.store-button {
   font-size: 14px;
 }
 
+.trademark-note {
+  display: block;
+  max-width: 720px;
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #0f1622;
@@ -974,6 +1003,10 @@ a.store-button {
 
   .button {
     width: 100%;
+  }
+
+  .app-store-badge-link {
+    justify-self: start;
   }
 
   .app-showcase {

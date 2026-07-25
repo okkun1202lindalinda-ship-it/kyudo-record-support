@@ -32,6 +32,10 @@ APP_STORE_URL = (
     "%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/"
     "id6790650199"
 )
+APP_STORE_BADGE_URL = (
+    "https://tools.applemediaservices.com/api/badges/"
+    "download-on-the-app-store/black/ja-jp?size=250x83"
+)
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -85,6 +89,7 @@ class PageParser(HTMLParser):
         self.has_apple_touch_icon = False
         self.x_links = 0
         self.app_store_links = 0
+        self.app_store_badges = 0
         self.head_depth = 0
         self.scripts: list[tuple[str, bool, bool]] = []
 
@@ -133,6 +138,8 @@ class PageParser(HTMLParser):
         if tag == "img":
             if "alt" not in values:
                 self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
+            if values.get("src") == APP_STORE_BADGE_URL:
+                self.app_store_badges += 1
             classes = set((values.get("class") or "").split())
             if "support-screenshot" in classes and (
                 values.get("width"), values.get("height")
@@ -304,6 +311,17 @@ def validate_page(path: Path) -> list[str]:
         errors.append("公式Xリンクがない")
     if relative in {"index.html", "releases/index.html"} and parser.app_store_links == 0:
         errors.append("公開中のApp Storeリンクがない")
+    if relative in {"index.html", "releases/index.html"}:
+        if parser.app_store_badges != 1:
+            errors.append(
+                f"Apple公式App Storeバッジが1点ではない: "
+                f"{parser.app_store_badges}点"
+            )
+        trademark_notice = (
+            "Apple、Appleのロゴ、およびApp Storeは、"
+        )
+        if trademark_notice not in source:
+            errors.append("Appleの商標クレジットがない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",
