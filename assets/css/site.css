@@ -453,6 +453,25 @@ main {
   box-shadow: var(--shadow-card);
 }
 
+.story-screenshot {
+  width: min(310px, 72%);
+  max-width: 100%;
+  margin-block: 0;
+  margin-inline: auto;
+}
+
+.story-screenshot picture {
+  display: block;
+}
+
+.story-screenshot img {
+  width: 100%;
+  height: auto;
+  border-radius: 28px;
+  object-fit: contain;
+  box-shadow: var(--shadow-card);
+}
+
 .story-copy h2,
 .download-copy h2 {
   margin: 0 0 18px;

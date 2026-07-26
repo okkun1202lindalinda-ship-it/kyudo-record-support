@@ -240,7 +240,7 @@
 
         <div class="feature-grid">
           <article class="feature-card">
-            <h3>射位置記録</h3>
+            <h3>矢所の記録</h3>
             <p>写真または画面上の的へ、一射ごとの着弾位置を記録できます。</p>
           </article>
           <article class="feature-card">
@@ -249,7 +249,7 @@
           </article>
           <article class="feature-card">
             <h3>統計</h3>
-            <p>射数、的中率、推移、散布図から稽古の変化を確認できます。</p>
+            <p>記録を期間ごとに表示し、成長を確認できます。</p>
           </article>
           <article class="feature-card">
             <h3>振り返り</h3>
@@ -280,21 +280,38 @@
           <p class="eyebrow">一冊のノートとして</p>
           <h2 id="story-title">記録した瞬間が、完成ではありません。</h2>
           <p>
-            稽古の記録へ後から道具や気づきを補い、
+            後から道具や気づきを補い、
             散布図や統計で見返すことで、日々の記録は自分だけの弓道史へ育っていきます。
           </p>
         </div>
-        <blockquote class="story-note">
-          「今日の一射」を、<br>
-          未来の自分へ残す。
-        </blockquote>
+        <figure class="story-screenshot">
+          <picture>
+            <source
+              type="image/webp"
+              srcset="
+                assets/images/app-session-edit-360.webp 360w,
+                assets/images/app-session-edit-480.webp 480w,
+                assets/images/app-session-edit-720.webp 720w
+              "
+              sizes="(max-width: 720px) 72vw, 310px"
+            >
+            <img
+              src="assets/images/app-session-edit.jpg"
+              alt="練習日時、射場、弓、矢、弦、弽、射のメモを確認・編集するセッション編集画面"
+              width="720"
+              height="1564"
+              loading="lazy"
+              decoding="async"
+            >
+          </picture>
+        </figure>
       </div>
     </section>
 
     <section class="section" id="download" aria-labelledby="download-title">
       <div class="container download-grid">
         <div class="download-copy">
-          <p class="eyebrow">Download</p>
+          <p class="eyebrow">ダウンロード</p>
           <h2 id="download-title">各OSの公開状況</h2>
           <p>
             iOS版の現行公開版はVersion 7.2.5です。<br>
@@ -371,7 +388,7 @@
     <section class="section section-dark" aria-labelledby="future-title">
       <div class="container">
         <div class="section-heading">
-          <p class="eyebrow">Roadmap</p>
+          <p class="eyebrow">ロードマップ</p>
           <h2 id="future-title">今後追加予定</h2>
           <p>
             弓道人の記録をより深く育てる機能を、段階的に追加していきます。
@@ -379,11 +396,14 @@
         </div>
         <ul class="roadmap-list">
           <li>実績（Coming soon）</li>
-          <li>巻藁モード</li>
-          <li>遠的</li>
+          <li>遠的・巻藁</li>
           <li>大会モード</li>
-          <li>ライブカメラ記録</li>
-          <li>AI自動認識</li>
+          <li>自動的中判定</li>
+          <li>天気の記録</li>
+          <li>ウィジェット</li>
+          <li>多言語対応</li>
+          <li>部活・道場管理</li>
+          <li>オンライン大会</li>
         </ul>
       </div>
     </section>
@@ -391,7 +411,7 @@
     <section class="section" aria-labelledby="portal-title">
       <div class="container">
         <div class="section-heading center">
-          <p class="eyebrow">Official Portal</p>
+          <p class="eyebrow">公式サイト</p>
           <h2 id="portal-title">情報とサポートを、ここに集約。</h2>
           <p>
             リリースノートや追加コンテンツなど、今後の展開を同じ場所から確認できます。
@@ -405,7 +425,7 @@
           </article>
           <article class="future-card">
             <span class="status">構成済み</span>
-            <h3><a href="releases/">Release Notes</a></h3>
+            <h3><a href="releases/">リリースノート</a></h3>
             <p>バージョンごとの変更内容を掲載します。</p>
           </article>
           <article class="future-card">
@@ -420,7 +440,7 @@
           </article>
           <article class="future-card">
             <span class="status">公開中</span>
-            <h3><a href="support.html#faq">FAQ</a></h3>
+            <h3><a href="support.html#faq">よくある質問</a></h3>
             <p>よくある質問とアプリの使い方を確認できます。</p>
           </article>
           <article class="future-card">
@@ -436,9 +456,9 @@
       <div class="container support-grid">
         <div>
           <div class="section-heading">
-            <p class="eyebrow">Support</p>
+            <p class="eyebrow">サポート</p>
             <h2 id="support-title">安心して、長く記録するために。</h2>
-            <p>使い方、FAQ、問い合わせ先、データの取り扱いを確認できます。</p>
+            <p>使い方、サポート、問い合わせ先、データの取り扱いを確認できます。</p>
           </div>
           <div class="button-row">
             <a class="button" href="support.html">サポートを見る</a>
@@ -480,7 +500,7 @@
       <div>
         <h3>サポート</h3>
         <ul>
-          <li><a href="support.html">サポート・FAQ</a></li>
+          <li><a href="support.html">サポート・よくある質問</a></li>
           <li><a href="privacy/">プライバシーポリシー</a></li>
         </ul>
       </div>
