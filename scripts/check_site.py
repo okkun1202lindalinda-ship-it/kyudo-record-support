@@ -36,7 +36,7 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
-CURRENT_IOS_VERSION = "7.2.5"
+CURRENT_IOS_VERSION = "7.2.6"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -315,6 +315,7 @@ def validate_page(path: Path) -> list[str]:
     expected_app_store_badges = {
         "index.html": 2,
         "releases/index.html": 1,
+        "releases/v7-2-6.html": 1,
     }
     if relative in expected_app_store_badges:
         expected_badge_count = expected_app_store_badges[relative]
@@ -334,6 +335,16 @@ def validate_page(path: Path) -> list[str]:
             errors.append("iOSの現行バージョンが明記されていない")
         if "現行バージョン：なし" not in source:
             errors.append("Androidに現行バージョンがないことが明記されていない")
+        if (
+            '<span class="status">App Store配信中</span>\n'
+            '          <h2><a href="v7-2-6.html">Version 7.2.6</a></h2>'
+        ) not in source:
+            errors.append("Version 7.2.6がApp Store配信中になっていない")
+        if (
+            '<span class="status">過去の公開版</span>\n'
+            '          <h2><a href="v7-2-5.html">Version 7.2.5</a></h2>'
+        ) not in source:
+            errors.append("Version 7.2.5が過去の公開版になっていない")
 
     if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
         if "App Store配信中" not in source:
@@ -346,6 +357,19 @@ def validate_page(path: Path) -> list[str]:
         "最新リリース候補 Version 7.2.6": (
             "未公開版を現行版と誤認させる案内が残っている"
         ),
+        "現行公開版 Version 7.2.5": (
+            "旧iOS現行バージョンの案内が残っている"
+        ),
+        "現行公開版はVersion 7.2.5": (
+            "旧iOS現行バージョンの案内が残っている"
+        ),
+        "次期アップデート候補": "未公開版の案内が残っている",
+        "開発中・未公開": "未公開版の案内が残っている",
+        "App Storeの現行公開版ではありません": (
+            "現行公開版ではないという案内が残っている"
+        ),
+        "承認済み": "利用者向けHTMLに内部工程の表現が残っている",
+        "DB Schema 15": "利用者向けHTMLに内部Schema番号が残っている",
         "Build 16": "利用者向けHTMLに内部Build番号が残っている",
         "Build 17": "利用者向けHTMLに内部Build番号が残っている",
     }
