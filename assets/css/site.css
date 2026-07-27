@@ -326,7 +326,7 @@ main {
   transform: rotate(-6deg);
 }
 
-.phone-shot-statistics {
+.phone-shot-note {
   z-index: 1;
   top: 88px;
   right: 0;
@@ -955,7 +955,7 @@ main {
     left: 0;
   }
 
-  .phone-shot-statistics {
+  .phone-shot-note {
     top: 82px;
   }
 
