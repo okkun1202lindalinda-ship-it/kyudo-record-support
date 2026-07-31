@@ -237,6 +237,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-2-5.html": "/releases/v7-2-5.html",
         "releases/v7-2-6.html": "/releases/v7-2-6.html",
         "releases/v7-3-1.html": "/releases/v7-3-1.html",
+        "releases/v7-3-2.html": "/releases/v7-3-2.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
@@ -338,9 +339,14 @@ def validate_page(path: Path) -> list[str]:
             errors.append("Androidに現行バージョンがないことが明記されていない")
         if (
             '<span class="status">最新リリース候補</span>\n'
+            '          <h2><a href="v7-3-2.html">Version 7.3.2</a></h2>'
+        ) not in source:
+            errors.append("Version 7.3.2が最新リリース候補になっていない")
+        if (
+            '<span class="status">App Store審査中</span>\n'
             '          <h2><a href="v7-3-1.html">Version 7.3.1</a></h2>'
         ) not in source:
-            errors.append("Version 7.3.1が最新リリース候補になっていない")
+            errors.append("Version 7.3.1がApp Store審査中になっていない")
         if (
             '<span class="status">App Store配信中</span>\n'
             '          <h2><a href="v7-2-6.html">Version 7.2.6</a></h2>'
@@ -357,10 +363,18 @@ def validate_page(path: Path) -> list[str]:
             errors.append("現行iOS版がApp Store配信中と明記されていない")
 
     if relative == "releases/v7-3-1.html":
-        if "最新リリース候補" not in source:
-            errors.append("Version 7.3.1が最新リリース候補と明記されていない")
+        if "App Store審査中" not in source:
+            errors.append("Version 7.3.1がApp Store審査中と明記されていない")
         if "App Storeで現在利用できるバージョンは7.2.6です" not in source:
             errors.append("Version 7.3.1候補と現行公開版が区別されていない")
+
+    if relative == "releases/v7-3-2.html":
+        if "最新リリース候補" not in source:
+            errors.append("Version 7.3.2が最新リリース候補と明記されていない")
+        if "Version 7.3.1は、現在App Storeで審査中です" not in source:
+            errors.append("Version 7.3.1の審査状態が明記されていない")
+        if "App Storeで現在利用できるバージョンは7.2.6です" not in source:
+            errors.append("Version 7.3.2候補と現行公開版が区別されていない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",
