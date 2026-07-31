@@ -86,7 +86,7 @@ python3 scripts/build_site.py --check
 
 ## App Store・Google Playの公開状況
 
-iOS版の現行公開版はVersion 7.2.6で、App Storeで公開中です。
+iOS版の現行公開版はVersion 7.3.1で、App Storeで公開中です。
 
 App Store URL：
 `https://apps.apple.com/jp/app/%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/id6790650199`
