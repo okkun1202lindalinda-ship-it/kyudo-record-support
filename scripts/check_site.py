@@ -36,7 +36,7 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
-CURRENT_IOS_VERSION = "7.3.1"
+CURRENT_IOS_VERSION = "7.3.2"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -338,15 +338,15 @@ def validate_page(path: Path) -> list[str]:
         if "現行バージョン：なし" not in source:
             errors.append("Androidに現行バージョンがないことが明記されていない")
         if (
-            '<span class="status">最新リリース候補</span>\n'
+            '<span class="status">App Store配信中</span>\n'
             '          <h2><a href="v7-3-2.html">Version 7.3.2</a></h2>'
         ) not in source:
-            errors.append("Version 7.3.2が最新リリース候補になっていない")
+            errors.append("Version 7.3.2がApp Store配信中になっていない")
         if (
-            '<span class="status">App Store配信中</span>\n'
+            '<span class="status">過去の公開版</span>\n'
             '          <h2><a href="v7-3-1.html">Version 7.3.1</a></h2>'
         ) not in source:
-            errors.append("Version 7.3.1がApp Store配信中になっていない")
+            errors.append("Version 7.3.1が過去の公開版になっていない")
         if (
             '<span class="status">過去の公開版</span>\n'
             '          <h2><a href="v7-2-6.html">Version 7.2.6</a></h2>'
@@ -363,18 +363,16 @@ def validate_page(path: Path) -> list[str]:
             errors.append("現行iOS版がApp Store配信中と明記されていない")
 
     if relative == "releases/v7-3-1.html":
-        if "App Store配信中" not in source:
-            errors.append("Version 7.3.1がApp Store配信中と明記されていない")
-        if "Version 7.3.1は、現在App Storeで公開中です" not in source:
-            errors.append("Version 7.3.1の公開状態が明記されていない")
+        if "過去の公開版" not in source:
+            errors.append("Version 7.3.1が過去の公開版と明記されていない")
+        if "Version 7.3.1は、過去の公開版です" not in source:
+            errors.append("Version 7.3.1の過去版状態が明記されていない")
 
     if relative == "releases/v7-3-2.html":
-        if "最新リリース候補" not in source:
-            errors.append("Version 7.3.2が最新リリース候補と明記されていない")
-        if "Version 7.3.1は、現在App Storeで公開中です" not in source:
-            errors.append("Version 7.3.1の公開状態が明記されていない")
-        if "Version 7.3.2は最新リリース候補です" not in source:
-            errors.append("Version 7.3.2候補と現行公開版が区別されていない")
+        if "App Store配信中" not in source:
+            errors.append("Version 7.3.2がApp Store配信中と明記されていない")
+        if "Version 7.3.2は、現在App Storeで公開中です" not in source:
+            errors.append("Version 7.3.2の公開状態が明記されていない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",
