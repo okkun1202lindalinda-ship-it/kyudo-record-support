@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
 import struct
@@ -22,6 +23,7 @@ from generate_sitemap import (
 ROOT = Path(__file__).resolve().parent.parent
 HTML_FILES = (
     sorted(ROOT.glob("*.html"))
+    + sorted((ROOT / "guide").glob("*.html"))
     + sorted((ROOT / "privacy").glob("*.html"))
     + sorted((ROOT / "releases").glob("*.html"))
 )
@@ -31,6 +33,10 @@ APP_STORE_URL = (
     "%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE"
     "%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/"
     "id6790650199"
+)
+APP_STORE_CAMPAIGN_URL = (
+    "https://apps.apple.com/app/apple-store/id6790650199"
+    "?pt=129167614&ct=OfficialSite&mt=8"
 )
 APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
@@ -68,6 +74,38 @@ ALPHA_PNG_ASSETS = {
     "assets/icons/x-logo-black-68.png": (68, 70),
     "assets/icons/x-logo-white-68.png": (68, 70),
 }
+GUIDE_IMAGE_SHA256 = {
+    "assets/images/guide/guide-01-record-method.png": (
+        "e0f3032db7668a9a29694036e2f6205feabc44a06ad8a772564e953891f3e8d4"
+    ),
+    "assets/images/guide/guide-02-practice-type.png": (
+        "e9017b661689cbbf88e4598ae5da163d118edec657b732be1fe10076df893219"
+    ),
+    "assets/images/guide/guide-03-photo-record.png": (
+        "c5c110090e44f9c6c9a6a4961ac3284a1217dc65d3fdc5e9c0c55c35245d66c5"
+    ),
+    "assets/images/guide/guide-04-makiwara.png": (
+        "9edeea0c05d43a5273e17f4a5eadd3d697fb58dcfff698de84471b28d7b01b38"
+    ),
+    "assets/images/guide/guide-05-history-search.png": (
+        "a7c7f2e2dded91ba6cf88d2af6f9bc0007d02732ff66c2cdf3544b760c276c13"
+    ),
+    "assets/images/guide/guide-06-statistics-filter.png": (
+        "6ee7cf6a98f9b0676452b782a548ea5fdf6cd20b1af717cd213bfcfc34ec8d97"
+    ),
+    "assets/images/guide/guide-07-backup.png": (
+        "52530a27e7768a2c55b986acca01c1e9e11c5ba752b3f905dd16d9a51bfa9b58"
+    ),
+}
+GUIDE_IMAGE_DIMENSIONS = {
+    "assets/images/guide/guide-01-record-method.png": (1206, 2622),
+    "assets/images/guide/guide-02-practice-type.png": (1206, 2622),
+    "assets/images/guide/guide-03-photo-record.png": (1242, 2688),
+    "assets/images/guide/guide-04-makiwara.png": (1206, 2622),
+    "assets/images/guide/guide-05-history-search.png": (1206, 2622),
+    "assets/images/guide/guide-06-statistics-filter.png": (1206, 2622),
+    "assets/images/guide/guide-07-backup.png": (1206, 2622),
+}
 
 
 class PageParser(HTMLParser):
@@ -90,7 +128,9 @@ class PageParser(HTMLParser):
         self.has_apple_touch_icon = False
         self.x_links = 0
         self.app_store_links = 0
+        self.app_store_hrefs: list[str] = []
         self.app_store_badges = 0
+        self.guide_screenshots = 0
         self.head_depth = 0
         self.scripts: list[tuple[str, bool, bool]] = []
 
@@ -141,6 +181,23 @@ class PageParser(HTMLParser):
                 self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
             if values.get("src") == APP_STORE_BADGE_URL:
                 self.app_store_badges += 1
+            guide_src = values.get("src") or ""
+            if guide_src.startswith("../assets/images/guide/"):
+                self.guide_screenshots += 1
+                guide_relative_path = guide_src.removeprefix("../")
+                expected_dimensions = GUIDE_IMAGE_DIMENSIONS.get(
+                    guide_relative_path
+                )
+                actual_dimensions = (
+                    values.get("width"),
+                    values.get("height"),
+                )
+                if expected_dimensions is None or actual_dimensions != tuple(
+                    str(value) for value in expected_dimensions
+                ):
+                    self.errors.append(
+                        "使い方ガイド画像のwidth・height属性が不正"
+                    )
             classes = set((values.get("class") or "").split())
             if "support-screenshot" in classes and (
                 values.get("width"), values.get("height")
@@ -156,7 +213,10 @@ class PageParser(HTMLParser):
             href = values.get("href", "")
             if href == "https://x.com/MyKyudoNote":
                 self.x_links += 1
-            if href == APP_STORE_URL:
+            parsed_href = urlparse(href)
+            if parsed_href.netloc == "apps.apple.com":
+                self.app_store_hrefs.append(href)
+            if href == APP_STORE_CAMPAIGN_URL:
                 self.app_store_links += 1
             if values.get("target") == "_blank":
                 rel = set((values.get("rel") or "").split())
@@ -219,6 +279,7 @@ def validate_page(path: Path) -> list[str]:
 
     canonical_paths = {
         "index.html": "/",
+        "guide/index.html": "/guide/",
         "support.html": "/support.html",
         "privacy.html": "/privacy",
         "privacy/index.html": "/privacy",
@@ -312,12 +373,33 @@ def validate_page(path: Path) -> list[str]:
         if not candidate.exists():
             errors.append(f"{attr}のリンク先がない: {raw_reference}")
 
+    for href in parser.app_store_hrefs:
+        if not href.startswith("https://"):
+            errors.append(f"App StoreリンクがHTTPSではない: {href}")
+        if href != APP_STORE_CAMPAIGN_URL:
+            errors.append(
+                "クリック可能なApp StoreリンクがOfficialSiteではない: "
+                f"{href}"
+            )
+    if "ct=OfficialX" in source:
+        errors.append("公式サイトHTMLにOfficialXキャンペーンが混入している")
+
+    if not re.search(r">\s*使い方\s*</a>", source):
+        errors.append("グローバルナビゲーションに使い方リンクがない")
+    if not re.search(r">\s*使い方ガイド\s*</a>", source):
+        errors.append("フッターに使い方ガイドリンクがない")
+
     if path.name in {"index.html", "support.html"} and parser.x_links == 0:
         errors.append("公式Xリンクがない")
-    if relative in {"index.html", "releases/index.html"} and parser.app_store_links == 0:
+    if relative in {
+        "index.html",
+        "guide/index.html",
+        "releases/index.html",
+    } and parser.app_store_links == 0:
         errors.append("公開中のApp Storeリンクがない")
     expected_app_store_badges = {
         "index.html": 2,
+        "guide/index.html": 2,
         "releases/index.html": 1,
         "releases/v7-2-6.html": 1,
     }
@@ -333,6 +415,29 @@ def validate_page(path: Path) -> list[str]:
         )
         if trademark_notice not in source:
             errors.append("Appleの商標クレジットがない")
+
+    if relative == "guide/index.html":
+        if parser.guide_screenshots != 7:
+            errors.append(
+                "使い方ガイドの承認済み画像が7点ではない: "
+                f"{parser.guide_screenshots}点"
+            )
+        expected_section_ids = [
+            'id="record-method"',
+            'id="practice-type"',
+            'id="photo-record"',
+            'id="makiwara"',
+            'id="history-search"',
+            'id="statistics-filter"',
+            'id="backup"',
+        ]
+        section_positions = [
+            source.find(section_id) for section_id in expected_section_ids
+        ]
+        if any(position < 0 for position in section_positions):
+            errors.append("使い方ガイドの承認済み7項目が揃っていない")
+        elif section_positions != sorted(section_positions):
+            errors.append("使い方ガイドの承認済み順序が変更されている")
 
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
@@ -519,6 +624,12 @@ def main() -> int:
                 errors.append("JSON-LDのURLが独自ドメインではない")
             if f'"downloadUrl": "{APP_STORE_URL}"' not in serialized:
                 errors.append("JSON-LDのApp Store URLが不正")
+            json_ld_app_store_urls = re.findall(
+                r'https://apps\.apple\.com[^"\s]+',
+                serialized,
+            )
+            if any("?" in url for url in json_ld_app_store_urls):
+                errors.append("JSON-LDのApp Store URLにキャンペーンが混入している")
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     if "Host: kyudojapan.net" not in robots:
@@ -638,6 +749,22 @@ def main() -> int:
             errors.append(f"必須アセットがない: {relative_path}")
         else:
             errors.extend(validate_png(asset, expected_size, allow_alpha=True))
+
+    for relative_path, expected_digest in GUIDE_IMAGE_SHA256.items():
+        asset = ROOT / relative_path
+        if not asset.exists():
+            errors.append(f"承認済みガイド画像がない: {relative_path}")
+            continue
+        digest = hashlib.sha256(asset.read_bytes()).hexdigest()
+        if digest != expected_digest:
+            errors.append(f"承認済みガイド画像の内容が変更されている: {relative_path}")
+        errors.extend(
+            validate_png(
+                asset,
+                GUIDE_IMAGE_DIMENSIONS[relative_path],
+                allow_alpha=True,
+            )
+        )
 
     contrast_results = {
         name: contrast_ratio(foreground, background)

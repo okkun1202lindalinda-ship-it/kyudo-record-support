@@ -27,6 +27,7 @@ PUBLIC_FILES = (
 )
 PUBLIC_DIRECTORIES = (
     Path("assets"),
+    Path("guide"),
     Path("privacy"),
     Path("releases"),
 )

@@ -13,6 +13,7 @@ GitHub Pagesで公開する静的Webサイトです。
 ├── CNAME                     # GitHub Pages独自ドメイン
 ├── index.html                 # 公式ポータル
 ├── 404.html                   # 独自404ページ
+├── guide/index.html           # 承認済みの実画面を使った基本的な使い方
 ├── support.html               # 使い方・FAQ・問い合わせ・公式X
 ├── privacy.html               # 旧URL互換用プライバシーポリシー
 ├── privacy/index.html         # 公開URL /privacy のプライバシーポリシー
@@ -40,7 +41,7 @@ GitHub Pagesで公開する静的Webサイトです。
 
 ## 公開前確認
 
-- `index.html`、`support.html`、`privacy/`、`releases/`が表示できる
+- `index.html`、`guide/`、`support.html`、`privacy/`、`releases/`が表示できる
 - PC、スマートフォン、タブレット幅で文字切れ・横スクロールがない
 - キーボード操作でナビゲーション、公式X、サポートへ移動できる
 - `prefers-color-scheme: dark`で文字と背景のコントラストを維持する
@@ -91,6 +92,15 @@ iOS版の現行公開版はVersion 7.3.2で、App Storeで公開中です。
 App Store URL：
 `https://apps.apple.com/jp/app/%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/id6790650199`
 
+App StoreキャンペーンURLは、用途ごとに次の方針で管理します。
+
+- 公式サイト内のクリック可能なApp Storeリンク：`OfficialSite`キャンペーンURLを使用
+- 公式X：`OfficialX`キャンペーンURLを使用
+- JSON-LD・`sameAs`・`downloadUrl`：キャンペーンパラメータのない正規URLを使用
+
+キャンペーンURLを変更するときは、公開HTMLと`scripts/check_site.py`の期待値を
+同時に更新します。`OfficialX`キャンペーンURLは公式サイト内へ配置しません。
+
 Android版はGoogle Play未公開で、現行公開版はありません。ストアへの導線は`index.html`と
 `releases/index.html`で管理します。利用者向けページではBuild番号を原則として
 表示せず、確認できていないVersion番号をBuild番号から推測して掲載しません。
@@ -98,7 +108,8 @@ Android版はGoogle Play未公開で、現行公開版はありません。ス�
 App Storeへの主要導線には、Apple公式マーケティングツールが配信する日本語版の
 黒いApp Storeバッジを使用します。バッジ画像は加工・再描画・色変更・アニメーションを
 行わず、画面上で40px以上の高さと、バッジ高の4分の1以上の周囲余白を維持します。
-トップのHeroと各OSの公開状況の両方で、同じ公式バッジとApp Store URLを使用します。
+トップのHeroと各OSの公開状況では、同じ公式バッジと
+`OfficialSite`キャンペーンURLを使用します。
 
 ストア公開状況が変わった場合は、トップページ、リリースノート、
 JSON-LDの構造化データ、`scripts/generate_sitemap.py`の更新日を同時に更新します。
@@ -114,6 +125,17 @@ JSON-LDの構造化データ、`scripts/generate_sitemap.py`の更新日を同�
 
 `releases/README.md` の手順に沿って、バージョン単位のHTMLを追加します。
 既存ページへのリンクは相対パスを使い、独自ドメイン直下でも動作する状態を維持します。
+
+## 使い方ガイドの画像更新
+
+`guide/index.html`には、アプリの基本的な使い方を承認済みの実画面とともに掲載します。
+画像を更新するときは、次の順序を守ります。
+
+1. アプリの現行画面と画像が一致していることを確認する
+2. 使用する実画面についてユーザー承認を得る
+3. 元の縦横比・色・内容を維持したWeb用画像を生成する
+4. `scripts/check_site.py`を含む自動検査を実行する
+5. `scripts/generate_sitemap.py`でSitemapを更新する
 
 ## 公式X
 
