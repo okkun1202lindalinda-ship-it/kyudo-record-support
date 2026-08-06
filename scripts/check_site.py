@@ -96,6 +96,18 @@ GUIDE_IMAGE_SHA256 = {
     "assets/images/guide/guide-07-backup.png": (
         "52530a27e7768a2c55b986acca01c1e9e11c5ba752b3f905dd16d9a51bfa9b58"
     ),
+    "assets/images/guide/guide-08-imageless-record.png": (
+        "ab018e49d31a4fe00b48612110a75bbe86cd95bee5280947ea8fd83a15997d86"
+    ),
+    "assets/images/guide/guide-09-note.png": (
+        "cb8de0266df1829ddbe0530e5934295a852d81d23ae4762a788803e3e94f7ca6"
+    ),
+    "assets/images/guide/guide-10-personal-manual.png": (
+        "41a40033f0206b4ee8440b12ff3d5eb65aef47bc5b835e94fbd8ea9656943137"
+    ),
+    "assets/images/guide/guide-11-shooting-form.png": (
+        "34a6a94fe1d3382579ad1a06a70925ce06a781d0dfbf6f7907ea368ac8a3020b"
+    ),
 }
 GUIDE_IMAGE_DIMENSIONS = {
     "assets/images/guide/guide-01-record-method.png": (1206, 2622),
@@ -105,6 +117,10 @@ GUIDE_IMAGE_DIMENSIONS = {
     "assets/images/guide/guide-05-history-search.png": (1206, 2622),
     "assets/images/guide/guide-06-statistics-filter.png": (1206, 2622),
     "assets/images/guide/guide-07-backup.png": (1206, 2622),
+    "assets/images/guide/guide-08-imageless-record.png": (1206, 2622),
+    "assets/images/guide/guide-09-note.png": (1242, 2688),
+    "assets/images/guide/guide-10-personal-manual.png": (1242, 2688),
+    "assets/images/guide/guide-11-shooting-form.png": (1242, 2688),
 }
 
 
@@ -417,17 +433,21 @@ def validate_page(path: Path) -> list[str]:
             errors.append("Appleの商標クレジットがない")
 
     if relative == "guide/index.html":
-        if parser.guide_screenshots != 7:
+        if parser.guide_screenshots != 11:
             errors.append(
-                "使い方ガイドの承認済み画像が7点ではない: "
+                "使い方ガイドの画像が11点ではない: "
                 f"{parser.guide_screenshots}点"
             )
         expected_section_ids = [
             'id="record-method"',
-            'id="practice-type"',
             'id="photo-record"',
+            'id="practice-type"',
+            'id="imageless-record"',
             'id="makiwara"',
             'id="history-search"',
+            'id="notes"',
+            'id="personal-manual"',
+            'id="shooting-form"',
             'id="statistics-filter"',
             'id="backup"',
         ]
@@ -435,9 +455,9 @@ def validate_page(path: Path) -> list[str]:
             source.find(section_id) for section_id in expected_section_ids
         ]
         if any(position < 0 for position in section_positions):
-            errors.append("使い方ガイドの承認済み7項目が揃っていない")
+            errors.append("使い方ガイドの11項目が揃っていない")
         elif section_positions != sorted(section_positions):
-            errors.append("使い方ガイドの承認済み順序が変更されている")
+            errors.append("使い方ガイドの項目順序が不正")
 
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
