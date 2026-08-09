@@ -42,7 +42,7 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
-CURRENT_IOS_VERSION = "7.3.2"
+CURRENT_IOS_VERSION = "7.4.1"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -317,6 +317,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-3-2.html": "/releases/v7-3-2.html",
         "releases/v7-4-0.html": "/releases/v7-4-0.html",
         "releases/v7-4-1.html": "/releases/v7-4-1.html",
+        "releases/v7-4-2.html": "/releases/v7-4-2.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
