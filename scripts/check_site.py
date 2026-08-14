@@ -42,7 +42,7 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
-CURRENT_IOS_VERSION = "7.4.1"
+CURRENT_IOS_VERSION = "7.4.2"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -460,16 +460,36 @@ def validate_page(path: Path) -> list[str]:
         elif section_positions != sorted(section_positions):
             errors.append("使い方ガイドの項目順序が不正")
 
+    if relative == "index.html":
+        if f'iOS版 {CURRENT_IOS_VERSION}をApp Storeで公開中' not in source:
+            errors.append("トップページのiOS現行版表示が不正")
+        if f'"softwareVersion": "{CURRENT_IOS_VERSION}"' not in source:
+            errors.append("構造化データのiOS現行版表示が不正")
+        if "最新リリース候補" in source:
+            errors.append("公開済みバージョンがリリース候補として残っている")
+
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
             errors.append("iOSの現行バージョンが明記されていない")
         if "現行バージョン：なし" not in source:
             errors.append("Androidに現行バージョンがないことが明記されていない")
+        current_release_href = CURRENT_IOS_VERSION.replace(".", "-")
         if (
             '<span class="status">App Store配信中</span>\n'
+            f'          <h2><a href="v{current_release_href}.html">'
+            f'Version {CURRENT_IOS_VERSION}</a></h2>'
+        ) not in source:
+            errors.append("現行iOS版がApp Store配信中になっていない")
+        if (
+            '<span class="status">過去の公開版</span>\n'
+            '          <h2><a href="v7-4-1.html">Version 7.4.1</a></h2>'
+        ) not in source:
+            errors.append("Version 7.4.1が過去の公開版になっていない")
+        if (
+            '<span class="status">過去の公開版</span>\n'
             '          <h2><a href="v7-3-2.html">Version 7.3.2</a></h2>'
         ) not in source:
-            errors.append("Version 7.3.2がApp Store配信中になっていない")
+            errors.append("Version 7.3.2が過去の公開版になっていない")
         if (
             '<span class="status">過去の公開版</span>\n'
             '          <h2><a href="v7-3-1.html">Version 7.3.1</a></h2>'
@@ -496,11 +516,23 @@ def validate_page(path: Path) -> list[str]:
         if "Version 7.3.1は、過去の公開版です" not in source:
             errors.append("Version 7.3.1の過去版状態が明記されていない")
 
+    if relative == "releases/v7-4-1.html":
+        if "過去の公開版" not in source:
+            errors.append("Version 7.4.1が過去の公開版と明記されていない")
+        if "Version 7.4.1は、過去の公開版です" not in source:
+            errors.append("Version 7.4.1の過去版状態が明記されていない")
+
     if relative == "releases/v7-3-2.html":
-        if "App Store配信中" not in source:
-            errors.append("Version 7.3.2がApp Store配信中と明記されていない")
-        if "Version 7.3.2は、現在App Storeで公開中です" not in source:
-            errors.append("Version 7.3.2の公開状態が明記されていない")
+        if "過去の公開版" not in source:
+            errors.append("Version 7.3.2が過去の公開版と明記されていない")
+        if "Version 7.3.2は、過去の公開版です" not in source:
+            errors.append("Version 7.3.2の過去版状態が明記されていない")
+
+    if relative == "releases/v7-2-5.html":
+        if "過去の公開版" not in source:
+            errors.append("Version 7.2.5が過去の公開版と明記されていない")
+        if "Version 7.2.5は、過去の公開版です" not in source:
+            errors.append("Version 7.2.5の過去版状態が明記されていない")
 
     stale_public_copy = {
         "初回公開前": "公開前の案内が残っている",
