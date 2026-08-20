@@ -43,6 +43,7 @@ APP_STORE_BADGE_URL = (
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
 CURRENT_IOS_VERSION = "7.4.2"
+RELEASE_CANDIDATE_VERSION = "7.4.3"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -318,6 +319,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-4-0.html": "/releases/v7-4-0.html",
         "releases/v7-4-1.html": "/releases/v7-4-1.html",
         "releases/v7-4-2.html": "/releases/v7-4-2.html",
+        "releases/v7-4-3.html": "/releases/v7-4-3.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
@@ -465,8 +467,12 @@ def validate_page(path: Path) -> list[str]:
             errors.append("トップページのiOS現行版表示が不正")
         if f'"softwareVersion": "{CURRENT_IOS_VERSION}"' not in source:
             errors.append("構造化データのiOS現行版表示が不正")
-        if "最新リリース候補" in source:
-            errors.append("公開済みバージョンがリリース候補として残っている")
+        if (
+            f"最新リリース候補</p>\n"
+            f'          <h2 id="latest-release-title">Version '
+            f"{RELEASE_CANDIDATE_VERSION}</h2>"
+        ) not in source:
+            errors.append("最新リリース候補の表示が不正")
 
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
@@ -474,6 +480,12 @@ def validate_page(path: Path) -> list[str]:
         if "現行バージョン：なし" not in source:
             errors.append("Androidに現行バージョンがないことが明記されていない")
         current_release_href = CURRENT_IOS_VERSION.replace(".", "-")
+        if (
+            '<span class="status">最新リリース候補</span>\n'
+            f'          <h2><a href="v{RELEASE_CANDIDATE_VERSION.replace(".", "-")}.html">'
+            f"Version {RELEASE_CANDIDATE_VERSION}</a></h2>"
+        ) not in source:
+            errors.append("最新リリース候補がリリース一覧にない")
         if (
             '<span class="status">App Store配信中</span>\n'
             f'          <h2><a href="v{current_release_href}.html">'
@@ -509,6 +521,12 @@ def validate_page(path: Path) -> list[str]:
     if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
         if "App Store配信中" not in source:
             errors.append("現行iOS版がApp Store配信中と明記されていない")
+
+    if relative == f"releases/v{RELEASE_CANDIDATE_VERSION.replace('.', '-')}.html":
+        if "最新リリース候補" not in source:
+            errors.append("リリース候補であることが明記されていない")
+        if "App Store配信中" in source:
+            errors.append("未公開のリリース候補がApp Store配信中になっている")
 
     if relative == "releases/v7-3-1.html":
         if "過去の公開版" not in source:
