@@ -96,6 +96,7 @@ App Store URL：
 App StoreキャンペーンURLは、用途ごとに次の方針で管理します。
 
 - 公式サイト内のクリック可能なApp Storeリンク：`OfficialSite`キャンペーンURLを使用
+- 「弓道の日」公開テスト区画：承認済みの`KyudoDay2026`キャンペーンURLを使用
 - 公式X：`OfficialX`キャンペーンURLを使用
 - JSON-LD・`sameAs`・`downloadUrl`：キャンペーンパラメータのない正規URLを使用
 

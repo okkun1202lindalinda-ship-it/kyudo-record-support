@@ -38,6 +38,11 @@ APP_STORE_CAMPAIGN_URL = (
     "https://apps.apple.com/app/apple-store/id6790650199"
     "?pt=129167614&ct=OfficialSite&mt=8"
 )
+APP_STORE_KYUDO_DAY_CAMPAIGN_URL = (
+    "https://apps.apple.com/app/apple-store/id6790650199"
+    "?pt=129167614&ct=KyudoDay2026&mt=8"
+)
+TESTFLIGHT_PUBLIC_URL = "https://testflight.apple.com/join/FtWHfkCh"
 APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
@@ -393,12 +398,15 @@ def validate_page(path: Path) -> list[str]:
         if not candidate.exists():
             errors.append(f"{attr}のリンク先がない: {raw_reference}")
 
+    allowed_app_store_links = {APP_STORE_CAMPAIGN_URL}
+    if relative == "index.html":
+        allowed_app_store_links.add(APP_STORE_KYUDO_DAY_CAMPAIGN_URL)
     for href in parser.app_store_hrefs:
         if not href.startswith("https://"):
             errors.append(f"App StoreリンクがHTTPSではない: {href}")
-        if href != APP_STORE_CAMPAIGN_URL:
+        if href not in allowed_app_store_links:
             errors.append(
-                "クリック可能なApp StoreリンクがOfficialSiteではない: "
+                "クリック可能なApp Storeリンクのキャンペーン指定が不正: "
                 f"{href}"
             )
     if "ct=OfficialX" in source:
@@ -418,7 +426,7 @@ def validate_page(path: Path) -> list[str]:
     } and parser.app_store_links == 0:
         errors.append("公開中のApp Storeリンクがない")
     expected_app_store_badges = {
-        "index.html": 2,
+        "index.html": 3,
         "guide/index.html": 2,
         "releases/index.html": 1,
         "releases/v7-2-6.html": 1,
@@ -474,6 +482,24 @@ def validate_page(path: Path) -> list[str]:
             f"{RELEASE_CANDIDATE_VERSION}</h2>"
         ) not in source:
             errors.append("最新リリース候補の表示が不正")
+        if source.count('id="kyudo-day-test"') != 1:
+            errors.append("弓道の日公開テスト区画が1つではない")
+        if TESTFLIGHT_PUBLIC_URL not in source:
+            errors.append("弓道の日公開テストリンクがない")
+        if parser.app_store_hrefs.count(
+            APP_STORE_KYUDO_DAY_CAMPAIGN_URL
+        ) != 1:
+            errors.append("KyudoDay2026のApp Storeリンクが1つではない")
+        for required_campaign_text in (
+            "正式公開前の最新版を、公開テストでご確認いただけます。",
+            "募集期間は2026年9月1日から9月20日まで、参加上限は100人です。",
+            "TestFlightは、正式公開前のベータ版へ参加するためのAppleの仕組みです。",
+        ):
+            if required_campaign_text not in source:
+                errors.append(
+                    "弓道の日公開テストの承認済み文章がない: "
+                    f"{required_campaign_text}"
+                )
 
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
