@@ -43,7 +43,7 @@ APP_STORE_BADGE_URL = (
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
 CURRENT_IOS_VERSION = "7.4.2"
-RELEASE_CANDIDATE_VERSION = "7.4.3"
+RELEASE_CANDIDATE_VERSION = "7.4.4"
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -320,6 +320,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-4-1.html": "/releases/v7-4-1.html",
         "releases/v7-4-2.html": "/releases/v7-4-2.html",
         "releases/v7-4-3.html": "/releases/v7-4-3.html",
+        "releases/v7-4-4.html": "/releases/v7-4-4.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
@@ -527,6 +528,12 @@ def validate_page(path: Path) -> list[str]:
             errors.append("リリース候補であることが明記されていない")
         if "App Store配信中" in source:
             errors.append("未公開のリリース候補がApp Store配信中になっている")
+
+    if relative == "releases/v7-4-3.html":
+        if "過去の候補" not in source or "開発履歴" not in source:
+            errors.append("Version 7.4.3が過去の候補・開発履歴と明記されていない")
+        if "最新リリース候補" in source:
+            errors.append("Version 7.4.3が最新リリース候補のままになっている")
 
     if relative == "releases/v7-3-1.html":
         if "過去の公開版" not in source:

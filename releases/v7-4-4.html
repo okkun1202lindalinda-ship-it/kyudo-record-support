@@ -5,29 +5,29 @@
   <script src="../assets/js/analytics.js" async></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#46689b">
-  <title>Version 7.4.3｜自分だけの弓道ノート</title>
+  <title>Version 7.4.4｜自分だけの弓道ノート</title>
   <meta
     name="description"
-    content="Version 7.4.3で実装した立ごとの立射・坐射、記録区分、履歴の絞り込み、矢番号表示、ネコちゃんテーマの暗色表示をまとめた過去の候補・開発履歴です。"
+    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
   >
-  <link rel="canonical" href="https://kyudojapan.net/releases/v7-4-3.html">
+  <link rel="canonical" href="https://kyudojapan.net/releases/v7-4-4.html">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:site_name" content="Kyudo JAPAN">
-  <meta property="og:title" content="Version 7.4.3｜自分だけの弓道ノート">
+  <meta property="og:title" content="Version 7.4.4｜自分だけの弓道ノート">
   <meta
     property="og:description"
-    content="Version 7.4.3で実装した立ごとの立射・坐射、記録区分、履歴の絞り込み、矢番号表示、ネコちゃんテーマの暗色表示をまとめた過去の候補・開発履歴です。"
+    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
   >
-  <meta property="og:url" content="https://kyudojapan.net/releases/v7-4-3.html">
+  <meta property="og:url" content="https://kyudojapan.net/releases/v7-4-4.html">
   <meta property="og:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@MyKyudoNote">
-  <meta name="twitter:url" content="https://kyudojapan.net/releases/v7-4-3.html">
-  <meta name="twitter:title" content="Version 7.4.3｜自分だけの弓道ノート">
+  <meta name="twitter:url" content="https://kyudojapan.net/releases/v7-4-4.html">
+  <meta name="twitter:title" content="Version 7.4.4｜自分だけの弓道ノート">
   <meta
     name="twitter:description"
-    content="Version 7.4.3で実装した立ごとの立射・坐射、記録区分、履歴の絞り込み、矢番号表示、ネコちゃんテーマの暗色表示をまとめた過去の候補・開発履歴です。"
+    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
   >
   <meta name="twitter:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
   <link rel="manifest" href="../manifest.webmanifest">
@@ -59,43 +59,45 @@
   <main id="main-content">
     <section class="page-hero">
       <div class="container">
-        <p class="eyebrow">過去の候補／開発履歴</p>
-        <h1>Version 7.4.3</h1>
+        <p class="eyebrow">最新リリース候補</p>
+        <h1>Version 7.4.4</h1>
       </div>
     </section>
     <section class="section">
       <div class="container narrow content-stack">
         <article class="content-card">
-          <span class="status">過去の候補／開発履歴</span>
+          <span class="status">最新リリース候補</span>
           <p>
-            Version 7.4.3では、各立の立射・坐射と、お稽古・大会・審査・講習会の区分を記録できるようにしました。
-            履歴・絞り込み・矢番号表示と、ネコちゃんテーマのダークモードも改善しました。
+            長い履歴を100件ずつ追加で読み込めるようにし、記録日時と写真の撮影日時を分けて表示します。
+            iPadの履歴更新、気温・湿度の検索、保存前の記録要約、遠的の得点計算、
+            画像・ノート添付・バックアップの安全性も改善しました。
           </p>
-          <p>Version 7.4.3は、過去の候補・開発履歴です。Version 7.4.2がApp Storeの現行公開版です。</p>
+          <p>Version 7.4.2がApp Storeの現行公開版です。Version 7.4.4は公開前のリリース候補です。</p>
         </article>
         <article class="content-card">
-          <h2>立射・坐射と記録の区分</h2>
+          <h2>履歴・検索・日時表示</h2>
           <ul>
-            <li>近的・遠的で、立ごとに立射または坐射を記録できるようにしました</li>
-            <li>同じセッション内でも、立射と坐射を使い分けられるようにしました</li>
-            <li>記録を「お稽古」「大会」「審査」「講習会」で整理し、履歴から絞り込めるようにしました</li>
+            <li>履歴を100件ずつ追加で読み込み、全体の件数と表示中の件数を確認できるようにしました</li>
+            <li>矢セットと個別の矢番号を同時に指定した検索を、同じ一射が両条件を満たす場合だけ表示するようにしました</li>
+            <li>編集した記録日時と写真の撮影日時を分けて表示し、写真を使わない記録には撮影日時を表示しないようにしました</li>
+            <li>iPadなどの分割表示で、詳細を保存した後に履歴一覧が更新されるようにしました</li>
+            <li>気温・湿度の未入力条件と数値範囲の検索を分かりやすく整理しました</li>
           </ul>
         </article>
         <article class="content-card">
-          <h2>矢番号と履歴</h2>
+          <h2>記録・遠的・保存</h2>
           <ul>
-            <li>既定の矢セットに登録された矢番号を、射順に確認しやすくしました</li>
-            <li>一射だけ別の矢へ変更した場合も、他の射の割り当てを維持するようにしました</li>
-            <li>履歴一覧と絞り込みを、記録区分が分かる表示へ改善しました</li>
+            <li>保存前に近的・遠的・巻藁の記録内容を確認できる要約を追加しました</li>
+            <li>遠的の得点を再計算し、記録した矢所と得点を確認しやすくしました</li>
+            <li>記録画像、ノート添付、バックアップの保存安全性を改善しました</li>
           </ul>
         </article>
         <article class="content-card">
-          <h2>表示とデータの引き継ぎ</h2>
-          <ul>
-            <li>ネコちゃんテーマのダークモードで主要ボタンを見やすくしました</li>
-            <li>アプリ内の表現と安定性を改善しました</li>
-          </ul>
-          <p>既存の記録・画像・道具・ノート・設定はそのまま引き継がれます。</p>
+          <h2>データの引き継ぎ</h2>
+          <p>
+            近的・遠的・巻藁を含む既存の記録、保存画像、ノート、道具、設定はそのまま引き継がれます。
+            これまでに入力した内容を削除せず、Version 7.4.4へ更新できます。
+          </p>
         </article>
         <div class="button-row">
           <a class="button" href="./">リリース一覧へ戻る</a>
