@@ -614,6 +614,18 @@ main {
   margin-top: 4px;
 }
 
+.store-button-live .button {
+  margin-top: 4px;
+  border-color: #ffffff;
+  color: #182235;
+  background: #ffffff;
+}
+
+.store-button-live .button:hover {
+  color: #182235;
+  background: #eef3fa;
+}
+
 .platform-version {
   margin: 0 0 6px;
   color: var(--color-text) !important;

@@ -42,6 +42,9 @@ APP_STORE_KYUDO_DAY_CAMPAIGN_URL = (
     "https://apps.apple.com/app/apple-store/id6790650199"
     "?pt=129167614&ct=KyudoDay2026&mt=8"
 )
+GOOGLE_PLAY_URL = (
+    "https://play.google.com/store/apps/details?id=com.okkun.kyudonote"
+)
 TESTFLIGHT_PUBLIC_URL = "https://testflight.apple.com/join/FtWHfkCh"
 APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
@@ -49,6 +52,13 @@ APP_STORE_BADGE_URL = (
 )
 CURRENT_IOS_VERSION = "7.4.2"
 RELEASE_CANDIDATE_VERSION = "7.4.4"
+ANDROID_JAPAN_PRICE = "910"
+INDEX_TITLE = "自分だけの弓道ノート｜iOS・Android対応の弓道記録アプリ"
+INDEX_DESCRIPTION = (
+    "弓道の稽古記録、履歴・統計、道具の記録を一つに。"
+    "「自分だけの弓道ノート」はApp Store・Google Playで公開中。"
+    "Android版の日本向け価格は910円（税込）です。"
+)
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
@@ -61,6 +71,7 @@ CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
     "補助文（Light）": ("#5d6879", "#f5f7fa"),
     "主要ボタン": ("#ffffff", "#46689b"),
+    "Google Playカードボタン": ("#182235", "#ffffff"),
     "App Storeボタン（Dark）": ("#ffffff", "#315b8f"),
     "Roadmapラベル（Light）": ("#315b8f", "#dfe9f8"),
     "本文（Dark）": ("#f4f7fb", "#0f1622"),
@@ -139,11 +150,16 @@ class PageParser(HTMLParser):
         self.title_depth = 0
         self.title_text: list[str] = []
         self.has_description = False
+        self.description = ""
         self.canonical = ""
+        self.og_title = ""
+        self.og_description = ""
         self.og_url = ""
         self.og_image = ""
         self.og_site_name = ""
         self.twitter_url = ""
+        self.twitter_title = ""
+        self.twitter_description = ""
         self.twitter_image = ""
         self.has_manifest = False
         self.has_favicon = False
@@ -152,6 +168,7 @@ class PageParser(HTMLParser):
         self.app_store_links = 0
         self.app_store_hrefs: list[str] = []
         self.app_store_badges = 0
+        self.google_play_hrefs: list[str] = []
         self.guide_screenshots = 0
         self.head_depth = 0
         self.scripts: list[tuple[str, bool, bool]] = []
@@ -173,7 +190,8 @@ class PageParser(HTMLParser):
             self.title_depth += 1
 
         if tag == "meta" and values.get("name") == "description":
-            self.has_description = bool(values.get("content"))
+            self.description = values.get("content") or ""
+            self.has_description = bool(self.description)
 
         if tag == "link":
             rel = set((values.get("rel") or "").split())
@@ -187,6 +205,10 @@ class PageParser(HTMLParser):
                 self.has_apple_touch_icon = bool(values.get("href"))
 
         if tag == "meta":
+            if values.get("property") == "og:title":
+                self.og_title = values.get("content") or ""
+            if values.get("property") == "og:description":
+                self.og_description = values.get("content") or ""
             if values.get("property") == "og:url":
                 self.og_url = values.get("content") or ""
             if values.get("property") == "og:image":
@@ -195,6 +217,10 @@ class PageParser(HTMLParser):
                 self.og_site_name = values.get("content") or ""
             if values.get("name") == "twitter:url":
                 self.twitter_url = values.get("content") or ""
+            if values.get("name") == "twitter:title":
+                self.twitter_title = values.get("content") or ""
+            if values.get("name") == "twitter:description":
+                self.twitter_description = values.get("content") or ""
             if values.get("name") == "twitter:image":
                 self.twitter_image = values.get("content") or ""
 
@@ -238,6 +264,8 @@ class PageParser(HTMLParser):
             parsed_href = urlparse(href)
             if parsed_href.netloc == "apps.apple.com":
                 self.app_store_hrefs.append(href)
+            if parsed_href.netloc == "play.google.com":
+                self.google_play_hrefs.append(href)
             if href == APP_STORE_CAMPAIGN_URL:
                 self.app_store_links += 1
             if values.get("target") == "_blank":
@@ -409,6 +437,20 @@ def validate_page(path: Path) -> list[str]:
                 "クリック可能なApp Storeリンクのキャンペーン指定が不正: "
                 f"{href}"
             )
+    for href in parser.google_play_hrefs:
+        if href != GOOGLE_PLAY_URL:
+            errors.append(f"Google Playリンクが正規URLではない: {href}")
+    expected_google_play_links = {
+        "index.html": 2,
+        "releases/index.html": 1,
+    }
+    if relative in expected_google_play_links:
+        expected_count = expected_google_play_links[relative]
+        if len(parser.google_play_hrefs) != expected_count:
+            errors.append(
+                f"Google Playリンクが{expected_count}点ではない: "
+                f"{len(parser.google_play_hrefs)}点"
+            )
     if "ct=OfficialX" in source:
         errors.append("公式サイトHTMLにOfficialXキャンペーンが混入している")
 
@@ -472,8 +514,32 @@ def validate_page(path: Path) -> list[str]:
             errors.append("使い方ガイドの項目順序が不正")
 
     if relative == "index.html":
-        if f'iOS版 {CURRENT_IOS_VERSION}をApp Storeで公開中' not in source:
-            errors.append("トップページのiOS現行版表示が不正")
+        if "App Store・Google Playで公開中 · 弓道人のための記録・分析アプリ" not in source:
+            errors.append("トップページ冒頭の各OS公開状態が不正")
+        if "".join(parser.title_text).strip() != INDEX_TITLE:
+            errors.append("トップページのtitleが不正")
+        if parser.description != INDEX_DESCRIPTION:
+            errors.append("トップページのmeta descriptionが不正")
+        if parser.og_title != INDEX_TITLE:
+            errors.append("トップページのog:titleが不正")
+        if parser.og_description != INDEX_DESCRIPTION:
+            errors.append("トップページのog:descriptionが不正")
+        if parser.twitter_title != INDEX_TITLE:
+            errors.append("トップページのtwitter:titleが不正")
+        if parser.twitter_description != INDEX_DESCRIPTION:
+            errors.append("トップページのtwitter:descriptionが不正")
+        for required_android_text in (
+            "Android版はGoogle Playで公開中です。",
+            f"日本向け販売価格は{ANDROID_JAPAN_PRICE}円（税込）です。",
+            "Android版を公開中",
+            f"日本向け価格：{ANDROID_JAPAN_PRICE}円（税込）",
+            "価格は日本向けの表示です。購入時の価格はGoogle Playでご確認ください。",
+        ):
+            if required_android_text not in source:
+                errors.append(
+                    "トップページのAndroid公開情報がない: "
+                    f"{required_android_text}"
+                )
         if f'"softwareVersion": "{CURRENT_IOS_VERSION}"' not in source:
             errors.append("構造化データのiOS現行版表示が不正")
         if (
@@ -504,8 +570,15 @@ def validate_page(path: Path) -> list[str]:
     if relative == "releases/index.html":
         if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
             errors.append("iOSの現行バージョンが明記されていない")
-        if "現行バージョン：なし" not in source:
-            errors.append("Androidに現行バージョンがないことが明記されていない")
+        for required_android_text in (
+            "Google Playで公開中です。",
+            f"日本向け価格：{ANDROID_JAPAN_PRICE}円（税込）",
+        ):
+            if required_android_text not in source:
+                errors.append(
+                    "リリース一覧のAndroid公開情報がない: "
+                    f"{required_android_text}"
+                )
         current_release_href = CURRENT_IOS_VERSION.replace(".", "-")
         if (
             '<span class="status">最新リリース候補</span>\n'
@@ -544,6 +617,30 @@ def validate_page(path: Path) -> list[str]:
             '          <h2><a href="v7-2-5.html">Version 7.2.5</a></h2>'
         ) not in source:
             errors.append("Version 7.2.5が過去の公開版になっていない")
+
+    if relative in {"index.html", "releases/index.html"}:
+        for stale_android_text in (
+            "Android版は現在公開準備中です。",
+            "現行公開版：なし",
+            "現行バージョン：なし",
+            "Google Play未公開",
+            "公開時期は今後お知らせします",
+        ):
+            if stale_android_text in source:
+                errors.append(
+                    "現在のAndroid公開状態と矛盾する表示が残っている: "
+                    f"{stale_android_text}"
+                )
+
+    if relative == "support.html":
+        for required_faq_text in (
+            "Androidでも使えますか？",
+            "はい。Android版をGoogle Playで公開しています。",
+            f"日本向け販売価格は{ANDROID_JAPAN_PRICE}円（税込）です。",
+            "購入時の価格と対応端末は、Google Playでご確認ください。",
+        ):
+            if required_faq_text not in source:
+                errors.append(f"Android版FAQがない: {required_faq_text}")
 
     if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
         if "App Store配信中" not in source:
@@ -685,6 +782,20 @@ def main() -> int:
     readme_source = (ROOT / "README.md").read_text(encoding="utf-8")
     if measurement_id and f"Measurement ID：`{measurement_id}`" not in readme_source:
         errors.append("READMEのMeasurement IDがGA4共通ローダーと一致しない")
+    for required_android_documentation in (
+        "Android版はGoogle Playで公開中です。",
+        GOOGLE_PLAY_URL,
+        "パッケージID：`com.okkun.kyudonote`",
+        f"日本向け販売価格：{ANDROID_JAPAN_PRICE}円（税込）",
+        "2026年9月20日",
+    ):
+        if required_android_documentation not in readme_source:
+            errors.append(
+                "READMEのAndroid公開情報がない: "
+                f"{required_android_documentation}"
+            )
+    if "Android版はGoogle Play未公開" in readme_source:
+        errors.append("READMEにAndroid未公開の旧案内が残っている")
 
     cname = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
     if cname != "kyudojapan.net":
@@ -734,6 +845,79 @@ def main() -> int:
             )
             if any("?" in url for url in json_ld_app_store_urls):
                 errors.append("JSON-LDのApp Store URLにキャンペーンが混入している")
+            graph = json_ld.get("@graph", []) if isinstance(json_ld, dict) else []
+            applications = [
+                item
+                for item in graph
+                if isinstance(item, dict)
+                and item.get("@type") == "SoftwareApplication"
+            ]
+            if len(applications) != 2:
+                errors.append(
+                    "JSON-LDのSoftwareApplicationがiOS・Androidの2件ではない"
+                )
+            ios_application = next(
+                (
+                    item
+                    for item in applications
+                    if str(item.get("operatingSystem", "")).startswith("iOS")
+                ),
+                None,
+            )
+            android_application = next(
+                (
+                    item
+                    for item in applications
+                    if item.get("operatingSystem") == "Android"
+                ),
+                None,
+            )
+            if ios_application is None:
+                errors.append("JSON-LDにiOS版のSoftwareApplicationがない")
+            else:
+                if ios_application.get("@id") != f"{SITE_ORIGIN}/#app":
+                    errors.append("JSON-LDのiOS版@idが不正")
+                if ios_application.get("downloadUrl") != APP_STORE_URL:
+                    errors.append("JSON-LDのiOS版downloadUrlが不正")
+                if ios_application.get("softwareVersion") != CURRENT_IOS_VERSION:
+                    errors.append("JSON-LDのiOS版softwareVersionが不正")
+            if android_application is None:
+                errors.append("JSON-LDにAndroid版のSoftwareApplicationがない")
+            else:
+                if android_application.get("@id") != f"{SITE_ORIGIN}/#app-android":
+                    errors.append("JSON-LDのAndroid版@idが不正")
+                if android_application.get("name") != "自分だけの弓道ノート":
+                    errors.append("JSON-LDのAndroid版アプリ名が不正")
+                for url_key in ("url", "downloadUrl"):
+                    if android_application.get(url_key) != GOOGLE_PLAY_URL:
+                        errors.append(f"JSON-LDのAndroid版{url_key}が不正")
+                for unverified_key in (
+                    "softwareVersion",
+                    "softwareRequirements",
+                    "datePublished",
+                    "aggregateRating",
+                    "review",
+                ):
+                    if unverified_key in android_application:
+                        errors.append(
+                            "JSON-LDのAndroid版に未確認情報がある: "
+                            f"{unverified_key}"
+                        )
+                offers = android_application.get("offers")
+                if not isinstance(offers, dict):
+                    errors.append("JSON-LDのAndroid版に価格情報がない")
+                else:
+                    if offers.get("@type") != "Offer":
+                        errors.append("JSON-LDのAndroid版価格情報の型が不正")
+                    if offers.get("price") != ANDROID_JAPAN_PRICE:
+                        errors.append("JSON-LDのAndroid版価格が不正")
+                    if offers.get("priceCurrency") != "JPY":
+                        errors.append("JSON-LDのAndroid版通貨がJPYではない")
+                    if offers.get("url") != GOOGLE_PLAY_URL:
+                        errors.append("JSON-LDのAndroid版価格URLが不正")
+                    eligible_region = offers.get("eligibleRegion")
+                    if eligible_region != {"@type": "Country", "name": "JP"}:
+                        errors.append("JSON-LDのAndroid版価格の対象地域が日本ではない")
 
     robots = (ROOT / "robots.txt").read_text(encoding="utf-8")
     if "Host: kyudojapan.net" not in robots:

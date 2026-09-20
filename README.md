@@ -103,9 +103,17 @@ App StoreキャンペーンURLは、用途ごとに次の方針で管理しま�
 キャンペーンURLを変更するときは、公開HTMLと`scripts/check_site.py`の期待値を
 同時に更新します。`OfficialX`キャンペーンURLは公式サイト内へ配置しません。
 
-Android版はGoogle Play未公開で、現行公開版はありません。ストアへの導線は`index.html`と
-`releases/index.html`で管理します。利用者向けページではBuild番号を原則として
-表示せず、確認できていないVersion番号をBuild番号から推測して掲載しません。
+Android版はGoogle Playで公開中です。公開状態と日本向け販売価格は2026年9月20日に
+確認しました。
+
+- Google Play URL：`https://play.google.com/store/apps/details?id=com.okkun.kyudonote`
+- パッケージID：`com.okkun.kyudonote`
+- 日本向け販売価格：910円（税込）
+
+ストアへの導線は`index.html`と`releases/index.html`で管理します。利用者向けページでは
+Build番号を原則として表示せず、一次情報で確認できていないAndroid版のVersion番号、
+最低対応OS、初回公開日を推測して掲載しません。Google Playの更新日も初回公開日として
+扱いません。
 
 App Storeへの主要導線には、Apple公式マーケティングツールが配信する日本語版の
 黒いApp Storeバッジを使用します。バッジ画像は加工・再描画・色変更・アニメーションを
