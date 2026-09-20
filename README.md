@@ -96,7 +96,6 @@ App Store URL：
 App StoreキャンペーンURLは、用途ごとに次の方針で管理します。
 
 - 公式サイト内のクリック可能なApp Storeリンク：`OfficialSite`キャンペーンURLを使用
-- 「弓道の日」公開テスト区画：承認済みの`KyudoDay2026`キャンペーンURLを使用
 - 公式X：`OfficialX`キャンペーンURLを使用
 - JSON-LD・`sameAs`・`downloadUrl`：キャンペーンパラメータのない正規URLを使用
 
@@ -120,6 +119,10 @@ App Storeへの主要導線には、Apple公式マーケティングツールが
 行わず、画面上で40px以上の高さと、バッジ高の4分の1以上の周囲余白を維持します。
 トップのHeroと各OSの公開状況では、同じ公式バッジと
 `OfficialSite`キャンペーンURLを使用します。
+
+Google Playへの主要導線には、Googleが配信する日本語版の公式バッジ
+`assets/images/google-play-badge-ja.png`を使用します。公式素材は加工・再描画・色変更を
+行わず、トップのHero、各OSの公開状況、リリースノート入口で同じバッジを使用します。
 
 ストア公開状況が変わった場合は、トップページ、リリースノート、
 JSON-LDの構造化データ、`scripts/generate_sitemap.py`の更新日を同時に更新します。

@@ -38,14 +38,13 @@ APP_STORE_CAMPAIGN_URL = (
     "https://apps.apple.com/app/apple-store/id6790650199"
     "?pt=129167614&ct=OfficialSite&mt=8"
 )
-APP_STORE_KYUDO_DAY_CAMPAIGN_URL = (
-    "https://apps.apple.com/app/apple-store/id6790650199"
-    "?pt=129167614&ct=KyudoDay2026&mt=8"
-)
 GOOGLE_PLAY_URL = (
     "https://play.google.com/store/apps/details?id=com.okkun.kyudonote"
 )
-TESTFLIGHT_PUBLIC_URL = "https://testflight.apple.com/join/FtWHfkCh"
+GOOGLE_PLAY_BADGE_ASSET = "assets/images/google-play-badge-ja.png"
+GOOGLE_PLAY_BADGE_SHA256 = (
+    "2b1b4ff5b79346bcfc5a78e760e781a5161202adb9884c58f142b457b4bc0a9c"
+)
 APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
@@ -71,7 +70,6 @@ CONTRAST_PAIRS = {
     "本文（Light）": ("#182235", "#f5f7fa"),
     "補助文（Light）": ("#5d6879", "#f5f7fa"),
     "主要ボタン": ("#ffffff", "#46689b"),
-    "Google Playカードボタン": ("#182235", "#ffffff"),
     "App Storeボタン（Dark）": ("#ffffff", "#315b8f"),
     "Roadmapラベル（Light）": ("#315b8f", "#dfe9f8"),
     "本文（Dark）": ("#f4f7fb", "#0f1622"),
@@ -90,6 +88,7 @@ PNG_ASSETS = {
 ALPHA_PNG_ASSETS = {
     "assets/icons/x-logo-black-68.png": (68, 70),
     "assets/icons/x-logo-white-68.png": (68, 70),
+    GOOGLE_PLAY_BADGE_ASSET: (646, 250),
 }
 GUIDE_IMAGE_SHA256 = {
     "assets/images/guide/guide-01-record-method.png": (
@@ -169,6 +168,7 @@ class PageParser(HTMLParser):
         self.app_store_hrefs: list[str] = []
         self.app_store_badges = 0
         self.google_play_hrefs: list[str] = []
+        self.google_play_badges = 0
         self.guide_screenshots = 0
         self.head_depth = 0
         self.scripts: list[tuple[str, bool, bool]] = []
@@ -229,6 +229,22 @@ class PageParser(HTMLParser):
                 self.errors.append(f"altのない画像: {values.get('src', '(srcなし)')}")
             if values.get("src") == APP_STORE_BADGE_URL:
                 self.app_store_badges += 1
+            image_src = values.get("src") or ""
+            if image_src.removeprefix("../") == GOOGLE_PLAY_BADGE_ASSET:
+                self.google_play_badges += 1
+                if (values.get("width"), values.get("height")) != (
+                    "646",
+                    "250",
+                ):
+                    self.errors.append(
+                        "Google Play公式バッジのwidth・height属性が不正"
+                    )
+                if "google-play-badge" not in set(
+                    (values.get("class") or "").split()
+                ):
+                    self.errors.append(
+                        "Google Play公式バッジのclass指定がない"
+                    )
             guide_src = values.get("src") or ""
             if guide_src.startswith("../assets/images/guide/"):
                 self.guide_screenshots += 1
@@ -427,8 +443,6 @@ def validate_page(path: Path) -> list[str]:
             errors.append(f"{attr}のリンク先がない: {raw_reference}")
 
     allowed_app_store_links = {APP_STORE_CAMPAIGN_URL}
-    if relative == "index.html":
-        allowed_app_store_links.add(APP_STORE_KYUDO_DAY_CAMPAIGN_URL)
     for href in parser.app_store_hrefs:
         if not href.startswith("https://"):
             errors.append(f"App StoreリンクがHTTPSではない: {href}")
@@ -451,6 +465,16 @@ def validate_page(path: Path) -> list[str]:
                 f"Google Playリンクが{expected_count}点ではない: "
                 f"{len(parser.google_play_hrefs)}点"
             )
+        if parser.google_play_badges != expected_count:
+            errors.append(
+                f"Google Play公式バッジが{expected_count}点ではない: "
+                f"{parser.google_play_badges}点"
+            )
+        google_trademark_notice = (
+            "Google Play および Google Play ロゴは、Google LLC の商標です。"
+        )
+        if google_trademark_notice not in source:
+            errors.append("Google Playの商標クレジットがない")
     if "ct=OfficialX" in source:
         errors.append("公式サイトHTMLにOfficialXキャンペーンが混入している")
 
@@ -468,7 +492,7 @@ def validate_page(path: Path) -> list[str]:
     } and parser.app_store_links == 0:
         errors.append("公開中のApp Storeリンクがない")
     expected_app_store_badges = {
-        "index.html": 3,
+        "index.html": 2,
         "guide/index.html": 2,
         "releases/index.html": 1,
         "releases/v7-2-6.html": 1,
@@ -548,23 +572,16 @@ def validate_page(path: Path) -> list[str]:
             f"{RELEASE_CANDIDATE_VERSION}</h2>"
         ) not in source:
             errors.append("最新リリース候補の表示が不正")
-        if source.count('id="kyudo-day-test"') != 1:
-            errors.append("弓道の日公開テスト区画が1つではない")
-        if TESTFLIGHT_PUBLIC_URL not in source:
-            errors.append("弓道の日公開テストリンクがない")
-        if parser.app_store_hrefs.count(
-            APP_STORE_KYUDO_DAY_CAMPAIGN_URL
-        ) != 1:
-            errors.append("KyudoDay2026のApp Storeリンクが1つではない")
-        for required_campaign_text in (
-            "正式公開前の最新版を、公開テストでご確認いただけます。",
-            "募集期間は2026年9月1日から9月20日まで、参加上限は100人です。",
-            "TestFlightは、正式公開前のベータ版へ参加するためのAppleの仕組みです。",
+        for expired_testflight_copy in (
+            "TestFlight",
+            "testflight.apple.com",
+            "kyudo-day-test",
+            "公開テストの参加者を募集",
         ):
-            if required_campaign_text not in source:
+            if expired_testflight_copy in source:
                 errors.append(
-                    "弓道の日公開テストの承認済み文章がない: "
-                    f"{required_campaign_text}"
+                    "終了したTestFlight公開テストの案内が残っている: "
+                    f"{expired_testflight_copy}"
                 )
 
     if relative == "releases/index.html":
@@ -1037,6 +1054,12 @@ def main() -> int:
             errors.append(f"必須アセットがない: {relative_path}")
         else:
             errors.extend(validate_png(asset, expected_size, allow_alpha=True))
+
+    google_play_badge = ROOT / GOOGLE_PLAY_BADGE_ASSET
+    if google_play_badge.exists():
+        digest = hashlib.sha256(google_play_badge.read_bytes()).hexdigest()
+        if digest != GOOGLE_PLAY_BADGE_SHA256:
+            errors.append("Google Play公式バッジの内容が変更されている")
 
     for relative_path, expected_digest in GUIDE_IMAGE_SHA256.items():
         asset = ROOT / relative_path
