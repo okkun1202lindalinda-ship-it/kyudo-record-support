@@ -5,29 +5,29 @@
   <script src="../assets/js/analytics.js" async></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#46689b">
-  <title>Version 7.4.4｜自分だけの弓道ノート</title>
+  <title>Version 7.4.7｜自分だけの弓道ノート</title>
   <meta
     name="description"
-    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
+    content="Version 7.4.7では、遠的の合計点とCSV出力を拡充し、セッション統合、バックアップ、巻藁の集計、散布図、稽古日の境界を改善します。"
   >
-  <link rel="canonical" href="https://kyudojapan.net/releases/v7-4-4.html">
+  <link rel="canonical" href="https://kyudojapan.net/releases/v7-4-7.html">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:site_name" content="Kyudo JAPAN">
-  <meta property="og:title" content="Version 7.4.4｜自分だけの弓道ノート">
+  <meta property="og:title" content="Version 7.4.7｜自分だけの弓道ノート">
   <meta
     property="og:description"
-    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
+    content="Version 7.4.7では、遠的の合計点とCSV出力を拡充し、セッション統合、バックアップ、巻藁の集計、散布図、稽古日の境界を改善します。"
   >
-  <meta property="og:url" content="https://kyudojapan.net/releases/v7-4-4.html">
+  <meta property="og:url" content="https://kyudojapan.net/releases/v7-4-7.html">
   <meta property="og:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@MyKyudoNote">
-  <meta name="twitter:url" content="https://kyudojapan.net/releases/v7-4-4.html">
-  <meta name="twitter:title" content="Version 7.4.4｜自分だけの弓道ノート">
+  <meta name="twitter:url" content="https://kyudojapan.net/releases/v7-4-7.html">
+  <meta name="twitter:title" content="Version 7.4.7｜自分だけの弓道ノート">
   <meta
     name="twitter:description"
-    content="Version 7.4.4では、履歴の追加読込、記録日時と撮影日時の分離、保存前要約、遠的の得点計算、画像・ノート添付・バックアップの安全性を改善します。"
+    content="Version 7.4.7では、遠的の合計点とCSV出力を拡充し、セッション統合、バックアップ、巻藁の集計、散布図、稽古日の境界を改善します。"
   >
   <meta name="twitter:image" content="https://kyudojapan.net/assets/images/ogp-1200x630.png">
   <link rel="manifest" href="../manifest.webmanifest">
@@ -59,44 +59,56 @@
   <main id="main-content">
     <section class="page-hero">
       <div class="container">
-        <p class="eyebrow">過去の候補／開発履歴</p>
-        <h1>Version 7.4.4</h1>
+        <p class="eyebrow">最新リリース候補</p>
+        <h1>Version 7.4.7（Build 27）</h1>
       </div>
     </section>
     <section class="section">
       <div class="container narrow content-stack">
         <article class="content-card">
-          <span class="status">過去の候補／開発履歴</span>
+          <span class="status">最新リリース候補</span>
           <p>
-            長い履歴を100件ずつ追加で読み込めるようにし、記録日時と写真の撮影日時を分けて表示します。
-            iPadの履歴更新、気温・湿度の検索、保存前の記録要約、遠的の得点計算、
-            画像・ノート添付・バックアップの安全性も改善しました。
+            遠的・カラー的の合計点を履歴一覧で確認でき、CSVには遠的条件、得点、
+            手動修正、的の3D傾きを追加します。異なる道具・弓道場を持つセッションの統合、
+            欠けた画像を含むバックアップ、巻藁の的中率、散布図の傾き、午前4時の日付境界も修正しました。
           </p>
-          <p>Version 7.4.4は過去の候補・開発履歴です。Version 7.4.2がApp Storeの現行公開版です。</p>
+          <p>Version 7.4.2がApp Storeの現行公開版です。Version 7.4.7は公開前のリリース候補です。</p>
         </article>
         <article class="content-card">
-          <h2>履歴・検索・日時表示</h2>
+          <h2>履歴と書き出し</h2>
           <ul>
-            <li>履歴を100件ずつ追加で読み込み、全体の件数と表示中の件数を確認できるようにしました</li>
-            <li>矢セットと個別の矢番号を同時に指定した検索を、同じ一射が両条件を満たす場合だけ表示するようにしました</li>
-            <li>編集した記録日時と写真の撮影日時を分けて表示し、写真を使わない記録には撮影日時を表示しないようにしました</li>
-            <li>iPadなどの分割表示で、詳細を保存した後に履歴一覧が更新されるようにしました</li>
-            <li>気温・湿度の未入力条件と数値範囲の検索を分かりやすく整理しました</li>
+            <li>遠的・カラー的の点数制記録で、履歴一覧に合計点を表示します</li>
+            <li>合計0点と未採点を区別します</li>
+            <li>従来のCSV32列を維持し、遠的条件、得点、手動修正、的の3D傾きの11列を追加します</li>
           </ul>
         </article>
         <article class="content-card">
-          <h2>記録・遠的・保存</h2>
+          <h2>データを守る修正</h2>
           <ul>
-            <li>保存前に近的・遠的・巻藁の記録内容を確認できる要約を追加しました</li>
-            <li>遠的の得点を再計算し、記録した矢所と得点を確認しやすくしました</li>
-            <li>記録画像、ノート添付、バックアップの保存安全性を改善しました</li>
+            <li>異なる入力済みの道具や弓道場を持つセッションの統合を中止します</li>
+            <li>参照中の画像や添付が欠けたバックアップを、現在のデータの置換前に拒否します</li>
+          </ul>
+        </article>
+        <article class="content-card">
+          <h2>統計と表示</h2>
+          <ul>
+            <li>巻藁の射数は練習量へ含め、的中率の分母から除外します</li>
+            <li>散布図へ保存済みの的の傾き補正を反映します</li>
+            <li>午前4時より前の記録を前の稽古日として月・週集計へ反映します</li>
           </ul>
         </article>
         <article class="content-card">
           <h2>データの引き継ぎ</h2>
           <p>
-            近的・遠的・巻藁を含む既存の記録、保存画像、ノート、道具、設定はそのまま引き継がれます。
-            これまでに入力した内容を削除せず、Version 7.4.4へ更新できます。
+            既存の記録、立、射、矢所、得点、日時、遠的・巻藁の設定、道具、ノート、添付、画像、
+            実績、テーマ、設定は削除・初期化しません。DB Schemaは22のままです。
+          </p>
+        </article>
+        <article class="content-card">
+          <h2>公開状態</h2>
+          <p>
+            Version 7.4.7は最新リリース候補です。各ストアへのアップロード、審査、公開状況は、
+            それぞれを確認したうえで分けて案内します。
           </p>
         </article>
         <div class="button-row">

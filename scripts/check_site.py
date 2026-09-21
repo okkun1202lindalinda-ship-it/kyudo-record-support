@@ -51,7 +51,7 @@ APP_STORE_BADGE_URL = (
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
 CURRENT_IOS_VERSION = "7.4.2"
-RELEASE_CANDIDATE_VERSION = "7.4.4"
+RELEASE_CANDIDATE_VERSION = "7.4.7"
 ANDROID_JAPAN_PRICE = "910"
 INDEX_TITLE = "自分だけの弓道ノート｜iOS・Android対応の弓道記録アプリ"
 INDEX_DESCRIPTION = (
@@ -384,6 +384,7 @@ def validate_page(path: Path) -> list[str]:
         "releases/v7-4-2.html": "/releases/v7-4-2.html",
         "releases/v7-4-3.html": "/releases/v7-4-3.html",
         "releases/v7-4-4.html": "/releases/v7-4-4.html",
+        "releases/v7-4-7.html": "/releases/v7-4-7.html",
     }
     expected_url = f"{SITE_ORIGIN}{canonical_paths[relative]}"
     if parser.canonical and parser.canonical != expected_url:
@@ -743,6 +744,12 @@ def validate_page(path: Path) -> list[str]:
             errors.append("Version 7.4.3が過去の候補・開発履歴と明記されていない")
         if "最新リリース候補" in source:
             errors.append("Version 7.4.3が最新リリース候補のままになっている")
+
+    if relative == "releases/v7-4-4.html":
+        if "過去の候補" not in source or "開発履歴" not in source:
+            errors.append("Version 7.4.4が過去の候補・開発履歴と明記されていない")
+        if "最新リリース候補" in source:
+            errors.append("Version 7.4.4が最新リリース候補のままになっている")
 
     if relative == "releases/v7-3-1.html":
         if "過去の公開版" not in source:
