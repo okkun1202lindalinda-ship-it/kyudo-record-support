@@ -722,6 +722,49 @@ main {
   margin-top: 28px;
 }
 
+.photo-contribution-actions {
+  display: flex;
+  margin-top: 28px;
+}
+
+#photo-handling,
+#photo-form {
+  scroll-margin-top: 24px;
+}
+
+.photo-contribution-list {
+  margin: 0;
+  padding-left: 1.35em;
+}
+
+.photo-contribution-list li + li {
+  margin-top: 8px;
+}
+
+.fillout-embed-shell {
+  min-width: 0;
+  margin-top: 24px;
+  padding: clamp(10px, 2vw, 18px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+
+.fillout-embed-shell > div {
+  max-width: 100%;
+}
+
+.fillout-direct-link {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: var(--radius-sm);
+  background: var(--color-brand-soft);
+}
+
+.fillout-direct-link a {
+  font-weight: 800;
+}
+
 .guide-toc {
   padding: clamp(24px, 4vw, 38px);
   border: 1px solid var(--color-border);
@@ -1176,6 +1219,7 @@ main {
 
   .guide-hero-actions,
   .guide-hero-actions .app-store-badge-link,
+  .photo-contribution-actions,
   .guide-bottom-cta,
   .guide-bottom-cta .app-store-badge-link {
     width: 100%;

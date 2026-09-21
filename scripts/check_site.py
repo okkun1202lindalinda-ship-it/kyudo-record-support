@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 HTML_FILES = (
     sorted(ROOT.glob("*.html"))
     + sorted((ROOT / "guide").glob("*.html"))
+    + sorted((ROOT / "photo-contribution").glob("*.html"))
     + sorted((ROOT / "privacy").glob("*.html"))
     + sorted((ROOT / "releases").glob("*.html"))
 )
@@ -61,6 +62,9 @@ INDEX_DESCRIPTION = (
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
 LEGACY_SUPPORT_EMAIL = "okkun1202.linda.linda@gmail.com"
+FILLOUT_FORM_ID = "sVwnSLE9L4us"
+FILLOUT_FORM_URL = f"https://forms.fillout.com/t/{FILLOUT_FORM_ID}"
+FILLOUT_SCRIPT_URL = "https://server.fillout.com/embed/v1/"
 ANALYTICS_SCRIPT = ROOT / "assets/js/analytics.js"
 GA_MEASUREMENT_ID_PATTERN = re.compile(
     r'const\s+measurementId\s*=\s*"(?P<id>G-[A-Z0-9]+)"\s*;'
@@ -271,7 +275,16 @@ class PageParser(HTMLParser):
                 )
 
         if "style" in values:
-            self.errors.append(f"インラインstyleを使用: <{tag}>")
+            is_approved_fillout_embed = (
+                tag == "div"
+                and values.get("style") == "width:100%;height:500px;"
+                and values.get("data-fillout-id") == FILLOUT_FORM_ID
+                and values.get("data-fillout-embed-type") == "standard"
+                and "data-fillout-inherit-parameters" in values
+                and "data-fillout-dynamic-resize" in values
+            )
+            if not is_approved_fillout_embed:
+                self.errors.append(f"インラインstyleを使用: <{tag}>")
 
         if tag == "a":
             href = values.get("href", "")
@@ -346,6 +359,7 @@ def validate_page(path: Path) -> list[str]:
     canonical_paths = {
         "index.html": "/",
         "guide/index.html": "/guide/",
+        "photo-contribution/index.html": "/photo-contribution/",
         "support.html": "/support.html",
         "privacy.html": "/privacy",
         "privacy/index.html": "/privacy",
@@ -582,6 +596,49 @@ def validate_page(path: Path) -> list[str]:
                 errors.append(
                     "終了したTestFlight公開テストの案内が残っている: "
                     f"{expired_testflight_copy}"
+                )
+
+        if 'href="photo-contribution/"' not in source:
+            errors.append("トップページに写真提供ページへの導線がない")
+
+    if relative == "photo-contribution/index.html":
+        required_copy = (
+            "写真から、的と矢所を自動で読み取るAIを開発しています。",
+            "近的・遠的、的外の矢が写った写真、矢がない的の写真も歓迎します。",
+            "写真を選び、取り扱いに同意して送信してください。",
+            "自動認識結果を返すものではありません。",
+            "本アプリに保存した写真が、この募集によって自動送信されることはありません。",
+            "原画像の一般公開に同意したことにはなりません。",
+            "保管期間と、送信後の利用停止・削除への対応条件は、現在の案内では確定していません。",
+        )
+        for required_text in required_copy:
+            if required_text not in source:
+                errors.append(f"写真提供ページの説明がない: {required_text}")
+
+        if source.count(f'data-fillout-id="{FILLOUT_FORM_ID}"') != 1:
+            errors.append("FilloutフォームIDが1つではない")
+        if source.count(FILLOUT_SCRIPT_URL) != 1:
+            errors.append("Fillout公式スクリプトが1つではない")
+        if source.count(FILLOUT_FORM_URL) != 1:
+            errors.append("Fillout直接リンクが1つではない")
+
+        handling_position = source.find('id="photo-handling"')
+        form_position = source.find('id="photo-form"')
+        embed_position = source.find(f'data-fillout-id="{FILLOUT_FORM_ID}"')
+        if min(handling_position, form_position, embed_position) < 0:
+            errors.append("写真の取り扱いまたはフォーム位置のIDがない")
+        elif not handling_position < form_position < embed_position:
+            errors.append("写真の取り扱いを読んでからフォームへ進む順序になっていない")
+
+        for internal_value in (
+            "10_画像受付中",
+            "drive.google.com",
+            "consentRecordId",
+            "contributorId",
+        ):
+            if internal_value in source:
+                errors.append(
+                    f"写真提供ページに内部管理情報が含まれている: {internal_value}"
                 )
 
     if relative == "releases/index.html":

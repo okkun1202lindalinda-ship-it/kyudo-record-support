@@ -14,6 +14,7 @@ GitHub Pagesで公開する静的Webサイトです。
 ├── index.html                 # 公式ポータル
 ├── 404.html                   # 独自404ページ
 ├── guide/index.html           # 承認済みの実画面を使った基本的な使い方
+├── photo-contribution/        # 正鵠の写真提供募集と完成済みFilloutフォーム
 ├── support.html               # 使い方・FAQ・問い合わせ・公式X
 ├── privacy.html               # 旧URL互換用プライバシーポリシー
 ├── privacy/index.html         # 公開URL /privacy のプライバシーポリシー
@@ -41,7 +42,7 @@ GitHub Pagesで公開する静的Webサイトです。
 
 ## 公開前確認
 
-- `index.html`、`guide/`、`support.html`、`privacy/`、`releases/`が表示できる
+- `index.html`、`guide/`、`photo-contribution/`、`support.html`、`privacy/`、`releases/`が表示できる
 - PC、スマートフォン、タブレット幅で文字切れ・横スクロールがない
 - キーボード操作でナビゲーション、公式X、サポートへ移動できる
 - `prefers-color-scheme: dark`で文字と背景のコントラストを維持する
