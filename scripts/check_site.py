@@ -603,17 +603,29 @@ def validate_page(path: Path) -> list[str]:
 
     if relative == "photo-contribution/index.html":
         required_copy = (
-            "写真から、的と矢所を自動で読み取るAIを開発しています。",
+            "写真から、的と矢所を自動で読み取る画像認識AIを開発しています。",
+            "ChatGPTのように文章を作ったり会話したりする生成AIではなく、",
+            "大量の文章を扱う大規模言語モデル（LLM）でもありません。",
+            "写真の解析を利用者の端末内だけで完了し、認識のために外部との通信を行わない仕様とする予定です。",
+            "このページに設置している写真提供フォームとは別の仕組みです。",
+            "写真提供フォームから送信する場合はインターネット通信が発生し、",
+            "アプリ内に保存された写真が、この写真募集に自動で加えられることはありません。",
             "近的・遠的、的外の矢が写った写真、矢がない的の写真も歓迎します。",
             "写真を選び、取り扱いに同意して送信してください。",
-            "自動認識結果を返すものではありません。",
-            "本アプリに保存した写真が、この募集によって自動送信されることはありません。",
             "原画像の一般公開に同意したことにはなりません。",
             "保管期間と、送信後の利用停止・削除への対応条件は、現在の案内では確定していません。",
         )
         for required_text in required_copy:
             if required_text not in source:
                 errors.append(f"写真提供ページの説明がない: {required_text}")
+
+        removed_copy = (
+            "写真の提供は任意です。",
+            "提供しなくても「自分だけの弓道ノート」の利用には影響しません。",
+        )
+        for removed_text in removed_copy:
+            if removed_text in source:
+                errors.append(f"削除承認済みの説明が残っている: {removed_text}")
 
         if source.count(f'data-fillout-id="{FILLOUT_FORM_ID}"') != 1:
             errors.append("FilloutフォームIDが1つではない")
