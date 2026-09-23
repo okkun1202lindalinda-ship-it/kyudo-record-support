@@ -88,9 +88,10 @@ python3 scripts/build_site.py --check
 
 ## App Store・Google Playの公開状況
 
-iOS版の現行公開版はVersion 7.4.2で、App Storeで公開中です。
-Version 7.4.7は最新リリース候補として掲載し、公開中とは表示しません。
-Version 7.4.4は過去の候補・開発履歴として保持します。
+iOS版・Android版の現行公開版はVersion 7.4.7です。2026年9月23日に
+App StoreとGoogle Playの日本向け公開ページで確認しました。
+iOS 15.0以降、Android 7.0以上が各ストアに表示された対応条件です。
+Version 7.4.2は過去の公開版、Version 7.4.3と7.4.4は過去の候補・開発履歴として保持します。
 
 App Store URL：
 `https://apps.apple.com/jp/app/%E8%87%AA%E5%88%86%E3%81%A0%E3%81%91%E3%81%AE%E5%BC%93%E9%81%93%E3%83%8E%E3%83%BC%E3%83%88/id6790650199`
@@ -104,7 +105,7 @@ App StoreキャンペーンURLは、用途ごとに次の方針で管理しま�
 キャンペーンURLを変更するときは、公開HTMLと`scripts/check_site.py`の期待値を
 同時に更新します。`OfficialX`キャンペーンURLは公式サイト内へ配置しません。
 
-Android版はGoogle Playで公開中です。公開状態と日本向け販売価格は2026年9月20日に
+Android版はGoogle Playで公開中です。公開状態と日本向け販売価格は2026年9月23日に
 確認しました。
 
 - Google Play URL：`https://play.google.com/store/apps/details?id=com.okkun.kyudonote`
@@ -112,9 +113,9 @@ Android版はGoogle Playで公開中です。公開状態と日本向け販売�
 - 日本向け販売価格：910円（税込）
 
 ストアへの導線は`index.html`と`releases/index.html`で管理します。利用者向けページでは
-Build番号を原則として表示せず、一次情報で確認できていないAndroid版のVersion番号、
-最低対応OS、初回公開日を推測して掲載しません。Google Playの更新日も初回公開日として
-扱いません。
+Build番号を原則として表示しません。Android版のVersion 7.4.7とAndroid 7.0以上は
+2026年9月23日にGoogle Play公開ページで確認しました。初回公開日を更新日から推測して
+掲載しません。
 
 App Storeへの主要導線には、Apple公式マーケティングツールが配信する日本語版の
 黒いApp Storeバッジを使用します。バッジ画像は加工・再描画・色変更・アニメーションを

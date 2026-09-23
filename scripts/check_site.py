@@ -50,14 +50,21 @@ APP_STORE_BADGE_URL = (
     "https://tools.applemediaservices.com/api/badges/"
     "download-on-the-app-store/black/ja-jp?size=250x83"
 )
-CURRENT_IOS_VERSION = "7.4.2"
-RELEASE_CANDIDATE_VERSION = "7.4.7"
+CURRENT_RELEASE_VERSION = "7.4.7"
+PREVIOUS_PUBLIC_VERSION = "7.4.2"
+CURRENT_IOS_REQUIREMENT = "iOS 15.0以降"
+STORE_VERIFIED_DATE = "2026年9月23日"
 ANDROID_JAPAN_PRICE = "910"
 INDEX_TITLE = "自分だけの弓道ノート｜iOS・Android対応の弓道記録アプリ"
 INDEX_DESCRIPTION = (
     "弓道の稽古記録、履歴・統計、道具の記録を一つに。"
     "「自分だけの弓道ノート」はApp Store・Google Playで公開中。"
     "Android版の日本向け価格は910円（税込）です。"
+)
+CURRENT_RELEASE_DESCRIPTION = (
+    "Version 7.4.7をApp Store・Google Playで公開しました。"
+    "遠的の合計点とCSV出力を拡充し、セッション統合、バックアップ復元、"
+    "巻藁の集計、散布図、稽古日の区切りを改善しました。"
 )
 LEGACY_ORIGIN = "okkun1202lindalinda-ship-it.github.io"
 SUPPORT_EMAIL = "mykyudonote@kyudojapan.net"
@@ -568,25 +575,33 @@ def validate_page(path: Path) -> list[str]:
         if parser.twitter_description != INDEX_DESCRIPTION:
             errors.append("トップページのtwitter:descriptionが不正")
         for required_android_text in (
-            "Android版はGoogle Playで公開中です。",
-            f"日本向け販売価格は{ANDROID_JAPAN_PRICE}円（税込）です。",
-            "Android版を公開中",
+            f"iOS版・Android版の現行バージョンは{CURRENT_RELEASE_VERSION}です。",
+            "App Store・Google Playで公開中です。",
+            f"Android版の日本向け販売価格は{ANDROID_JAPAN_PRICE}円（税込）です。",
             f"日本向け価格：{ANDROID_JAPAN_PRICE}円（税込）",
             "価格は日本向けの表示です。購入時の価格はGoogle Playでご確認ください。",
         ):
             if required_android_text not in source:
                 errors.append(
-                    "トップページのAndroid公開情報がない: "
+                    "トップページの各OS公開情報がない: "
                     f"{required_android_text}"
                 )
-        if f'"softwareVersion": "{CURRENT_IOS_VERSION}"' not in source:
-            errors.append("構造化データのiOS現行版表示が不正")
+        if source.count(
+            f"<strong>現行バージョン：{CURRENT_RELEASE_VERSION}</strong>"
+        ) != 2:
+            errors.append("トップページの両OSカードの現行版が一致しない")
         if (
-            f"最新リリース候補</p>\n"
+            f"現行公開版</p>\n"
             f'          <h2 id="latest-release-title">Version '
-            f"{RELEASE_CANDIDATE_VERSION}</h2>"
+            f"{CURRENT_RELEASE_VERSION}</h2>"
         ) not in source:
-            errors.append("最新リリース候補の表示が不正")
+            errors.append("トップページの現行公開版表示が不正")
+        if "Version 7.4.7をApp Store・Google Playで公開しました。" not in source:
+            errors.append("トップページに両ストア公開案内がない")
+        if 'id="current-release-title"' in source or "Version 7.4.2はApp Storeで公開中" in source:
+            errors.append("トップページに旧現行版の重複案内が残っている")
+        if "最新リリース候補" in source or "候補の変更内容を見る" in source:
+            errors.append("トップページに7.4.7の候補案内が残っている")
         for expired_testflight_copy in (
             "TestFlight",
             "testflight.apple.com",
@@ -655,8 +670,10 @@ def validate_page(path: Path) -> list[str]:
                 )
 
     if relative == "releases/index.html":
-        if f"現行バージョン：{CURRENT_IOS_VERSION}" not in source:
-            errors.append("iOSの現行バージョンが明記されていない")
+        if source.count(
+            f'<p class="platform-version">現行バージョン：{CURRENT_RELEASE_VERSION}</p>'
+        ) != 2:
+            errors.append("リリース一覧の両OSカードの現行版が一致しない")
         for required_android_text in (
             "Google Playで公開中です。",
             f"日本向け価格：{ANDROID_JAPAN_PRICE}円（税込）",
@@ -666,19 +683,23 @@ def validate_page(path: Path) -> list[str]:
                     "リリース一覧のAndroid公開情報がない: "
                     f"{required_android_text}"
                 )
-        current_release_href = CURRENT_IOS_VERSION.replace(".", "-")
+        current_release_href = CURRENT_RELEASE_VERSION.replace(".", "-")
         if (
-            '<span class="status">最新リリース候補</span>\n'
-            f'          <h2><a href="v{RELEASE_CANDIDATE_VERSION.replace(".", "-")}.html">'
-            f"Version {RELEASE_CANDIDATE_VERSION}</a></h2>"
-        ) not in source:
-            errors.append("最新リリース候補がリリース一覧にない")
-        if (
-            '<span class="status">App Store配信中</span>\n'
+            '<span class="status">現行公開版</span>\n'
             f'          <h2><a href="v{current_release_href}.html">'
-            f'Version {CURRENT_IOS_VERSION}</a></h2>'
+            f"Version {CURRENT_RELEASE_VERSION}</a></h2>"
         ) not in source:
-            errors.append("現行iOS版がApp Store配信中になっていない")
+            errors.append("現行公開版がリリース一覧にない")
+        if (
+            '<span class="status">過去の公開版</span>\n'
+            f'          <h2><a href="v{PREVIOUS_PUBLIC_VERSION.replace(".", "-")}.html">'
+            f'Version {PREVIOUS_PUBLIC_VERSION}</a></h2>'
+        ) not in source:
+            errors.append("Version 7.4.2が過去の公開版になっていない")
+        if "Version 7.4.7をApp Store・Google Playで公開しました。" not in source:
+            errors.append("リリース一覧に両ストア公開案内がない")
+        if "最新リリース候補" in source or "候補の変更内容を見る" in source:
+            errors.append("リリース一覧に7.4.7の候補案内が残っている")
         if (
             '<span class="status">過去の公開版</span>\n'
             '          <h2><a href="v7-4-1.html">Version 7.4.1</a></h2>'
@@ -729,27 +750,50 @@ def validate_page(path: Path) -> list[str]:
             if required_faq_text not in source:
                 errors.append(f"Android版FAQがない: {required_faq_text}")
 
-    if relative == f"releases/v{CURRENT_IOS_VERSION.replace('.', '-')}.html":
-        if "App Store配信中" not in source:
-            errors.append("現行iOS版がApp Store配信中と明記されていない")
+    if relative == f"releases/v{CURRENT_RELEASE_VERSION.replace('.', '-')}.html":
+        if source.count("Version 7.4.7はApp Store・Google Playで公開中です。") != 2:
+            errors.append("7.4.7詳細の冒頭と公開状態が一致しない")
+        if source.count("現行公開版") != 2:
+            errors.append("7.4.7詳細の公開状態ラベルが不正")
+        if any(
+            description != CURRENT_RELEASE_DESCRIPTION
+            for description in (
+                parser.description,
+                parser.og_description,
+                parser.twitter_description,
+            )
+        ):
+            errors.append("7.4.7詳細の検索・SNS向け説明が不正")
+        for stale_candidate_text in (
+            "最新リリース候補",
+            "公開前のリリース候補",
+            "候補の変更内容を見る",
+            "Version 7.4.2がApp Storeの現行公開版",
+        ):
+            if stale_candidate_text in source:
+                errors.append(f"7.4.7詳細に公開前の案内が残っている: {stale_candidate_text}")
 
-    if relative == f"releases/v{RELEASE_CANDIDATE_VERSION.replace('.', '-')}.html":
-        if "最新リリース候補" not in source:
-            errors.append("リリース候補であることが明記されていない")
+    if relative == f"releases/v{PREVIOUS_PUBLIC_VERSION.replace('.', '-')}.html":
+        if "Version 7.4.2は過去の公開版です。" not in source:
+            errors.append("Version 7.4.2が過去の公開版と明記されていない")
         if "App Store配信中" in source:
-            errors.append("未公開のリリース候補がApp Store配信中になっている")
+            errors.append("Version 7.4.2に旧現行版の案内が残っている")
 
     if relative == "releases/v7-4-3.html":
         if "過去の候補" not in source or "開発履歴" not in source:
             errors.append("Version 7.4.3が過去の候補・開発履歴と明記されていない")
         if "最新リリース候補" in source:
             errors.append("Version 7.4.3が最新リリース候補のままになっている")
+        if "Version 7.4.2がApp Storeの現行公開版" in source:
+            errors.append("Version 7.4.3に旧現行版の案内が残っている")
 
     if relative == "releases/v7-4-4.html":
         if "過去の候補" not in source or "開発履歴" not in source:
             errors.append("Version 7.4.4が過去の候補・開発履歴と明記されていない")
         if "最新リリース候補" in source:
             errors.append("Version 7.4.4が最新リリース候補のままになっている")
+        if "Version 7.4.2がApp Storeの現行公開版" in source:
+            errors.append("Version 7.4.4に旧現行版の案内が残っている")
 
     if relative == "releases/v7-3-1.html":
         if "過去の公開版" not in source:
@@ -876,11 +920,14 @@ def main() -> int:
     if measurement_id and f"Measurement ID：`{measurement_id}`" not in readme_source:
         errors.append("READMEのMeasurement IDがGA4共通ローダーと一致しない")
     for required_android_documentation in (
+        f"iOS版・Android版の現行公開版はVersion {CURRENT_RELEASE_VERSION}です。",
+        CURRENT_IOS_REQUIREMENT,
+        "Android 7.0以上",
         "Android版はGoogle Playで公開中です。",
         GOOGLE_PLAY_URL,
         "パッケージID：`com.okkun.kyudonote`",
         f"日本向け販売価格：{ANDROID_JAPAN_PRICE}円（税込）",
-        "2026年9月20日",
+        STORE_VERIFIED_DATE,
     ):
         if required_android_documentation not in readme_source:
             errors.append(
@@ -889,6 +936,8 @@ def main() -> int:
             )
     if "Android版はGoogle Play未公開" in readme_source:
         errors.append("READMEにAndroid未公開の旧案内が残っている")
+    if "Version 7.4.7は最新リリース候補" in readme_source:
+        errors.append("READMEに7.4.7の旧候補案内が残っている")
 
     cname = (ROOT / "CNAME").read_text(encoding="utf-8").strip()
     if cname != "kyudojapan.net":
@@ -972,8 +1021,10 @@ def main() -> int:
                     errors.append("JSON-LDのiOS版@idが不正")
                 if ios_application.get("downloadUrl") != APP_STORE_URL:
                     errors.append("JSON-LDのiOS版downloadUrlが不正")
-                if ios_application.get("softwareVersion") != CURRENT_IOS_VERSION:
+                if ios_application.get("softwareVersion") != CURRENT_RELEASE_VERSION:
                     errors.append("JSON-LDのiOS版softwareVersionが不正")
+                if ios_application.get("operatingSystem") != CURRENT_IOS_REQUIREMENT:
+                    errors.append("JSON-LDのiOS版対応OSが不正")
             if android_application is None:
                 errors.append("JSON-LDにAndroid版のSoftwareApplicationがない")
             else:
@@ -984,8 +1035,9 @@ def main() -> int:
                 for url_key in ("url", "downloadUrl"):
                     if android_application.get(url_key) != GOOGLE_PLAY_URL:
                         errors.append(f"JSON-LDのAndroid版{url_key}が不正")
+                if android_application.get("softwareVersion") != CURRENT_RELEASE_VERSION:
+                    errors.append("JSON-LDのAndroid版softwareVersionが不正")
                 for unverified_key in (
-                    "softwareVersion",
                     "softwareRequirements",
                     "datePublished",
                     "aggregateRating",

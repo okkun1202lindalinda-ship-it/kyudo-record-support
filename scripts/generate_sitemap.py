@@ -28,7 +28,7 @@ class SitemapEntry:
 
 # 公開URLの追加・更新はこの一覧だけを変更し、スクリプトを実行する。
 SITEMAP_ENTRIES = (
-    SitemapEntry("index.html", "/", "2026-09-21", "1.0"),
+    SitemapEntry("index.html", "/", "2026-09-23", "1.0"),
     SitemapEntry("guide/index.html", "/guide/", "2026-08-06", "0.8"),
     SitemapEntry(
         "photo-contribution/index.html",
@@ -38,29 +38,29 @@ SITEMAP_ENTRIES = (
     ),
     SitemapEntry("support.html", "/support.html", "2026-09-20", "0.8"),
     SitemapEntry("privacy/index.html", "/privacy", "2026-07-26", "0.8"),
-    SitemapEntry("releases/index.html", "/releases/", "2026-09-21", "0.6"),
+    SitemapEntry("releases/index.html", "/releases/", "2026-09-23", "0.6"),
     SitemapEntry(
         "releases/v7-4-7.html",
         "/releases/v7-4-7.html",
-        "2026-09-21",
+        "2026-09-23",
         "0.6",
     ),
     SitemapEntry(
         "releases/v7-4-4.html",
         "/releases/v7-4-4.html",
-        "2026-08-28",
+        "2026-09-23",
         "0.6",
     ),
     SitemapEntry(
         "releases/v7-4-3.html",
         "/releases/v7-4-3.html",
-        "2026-08-28",
+        "2026-09-23",
         "0.6",
     ),
     SitemapEntry(
         "releases/v7-4-2.html",
         "/releases/v7-4-2.html",
-        "2026-08-14",
+        "2026-09-23",
         "0.6",
     ),
     SitemapEntry(
